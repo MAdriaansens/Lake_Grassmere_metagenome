@@ -28,3 +28,6 @@ seqtk seq -L 2000 /home/mad149/Metagenome_grassmere/Assembl_3/spades_assembly_Z3
 #for Sample 15 no contigs exceed this size threshold
 
 module load BBMap/39.19-GCC-12.3.0
+cd /home/mad149/Metagenome_grassmere/Step5_BBMap
+module load BBMap/39.19-GCC-12.3.0
+stats.sh in=/home/mad149/Metagenome_grassmere/Step4_filter_size/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MetaSpades_2Kbsize_filtered.fna 2>&1 > Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MetaSpades_size_filtered_BBmap.txt

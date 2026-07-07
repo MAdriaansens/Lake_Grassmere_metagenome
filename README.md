@@ -21,3 +21,4 @@ spades.py --meta -k 33,55,77,99,121 -t $SLURM_CPUS_PER_TASK \
           -o spades_assembly_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}
 
 module load prodigal/2.6.3-GCCcore-12.3.0
+prodigal -i Assembl_3/spades_assembly_Z37TGN_15/contigs.fasta -o Prodigal/Z37GTN_15/Z37GTN_sample_15_genes.fna -a Prodigal/Z37GTN_15/Z37GTN_sample_15_proteins.faa -p meta

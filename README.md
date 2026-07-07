@@ -26,3 +26,5 @@ module load seqtk/1.4-GCC-13.3.0
 seqtk seq -L 2000 /home/mad149/Metagenome_grassmere/Assembl_3/spades_assembly_Z37TGN_15/contigs.fasta > Z37TGN_15_TrimmomaticJuly7_MetaSpades_2Kbsize_filtered.fasta
 
 #for Sample 15 no contigs exceed this size threshold
+
+module load BBMap/39.19-GCC-12.3.0

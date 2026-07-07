@@ -7,9 +7,6 @@ trimmomatic PE -threads 1 -phred33 -trimlog Illumina_Nextera_adapter.faa \
                
 #https://github.com/timflutre/trimmomatic/blob/master/adapters/NexteraPE-PE.fa
 
-
-
-
 module load BBMap/39.19-GCC-12.3.0
 bbduk.sh in=Z37TGN_10_sample_10_R1_subset8000.qc.fastq.gz out=Z37TGN_10_sample_10_R1_subset8000_bbduktrimmed.qc.fastq.gz ftl=2
 
@@ -22,3 +19,10 @@ spades.py --meta -k 33,55,77,99,121 -t $SLURM_CPUS_PER_TASK \
 
 module load prodigal/2.6.3-GCCcore-12.3.0
 prodigal -i Assembl_3/spades_assembly_Z37TGN_15/contigs.fasta -o Prodigal/Z37GTN_15/Z37GTN_sample_15_genes.fna -a Prodigal/Z37GTN_15/Z37GTN_sample_15_proteins.faa -p meta
+
+
+module load seqtk/1.4-GCC-13.3.0
+#only include contigs > 2Kb
+seqtk seq -L 2000 /home/mad149/Metagenome_grassmere/Assembl_3/spades_assembly_Z37TGN_15/contigs.fasta > Z37TGN_15_TrimmomaticJuly7_MetaSpades_2Kbsize_filtered.fasta
+
+#for Sample 15 no contigs exceed this size threshold

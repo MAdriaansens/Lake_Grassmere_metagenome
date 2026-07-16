@@ -1,35 +1,30 @@
 #!/bin/bash -e
-#SBATCH --job-name      IMap_reads
-#SBATCH --time          2:00:00
-#SBATCH --mem           6GB
-#SBATCH --cpus-per-task 15
+#SBATCH --job-name      BBMap
+#SBATCH --time          48:00:00
+#SBATCH --mem           60GB
+#SBATCH --cpus-per-task 20
 #SBATCH --exclude=n[13-15]
-#SBATCH --error         slurm_output_6BBmap/Isolate_%A-%a.err
-#SBATCH --output        slurm_output_6BBmap/Isolate_%A-%a.out
-#SBATCH --array         0-1
-declare -a array=('10')
+#SBATCH --error         slurm_output_BBmap/TrimmFastQC_%A-%a.err
+#SBATCH --output        slurm_output_BBmap/TrimmFastQC_%A-%a.out
+#SBATCH --array         0-15
+declare -a array=($(seq 2 16))
 
-MAG_Path=/scratch/projects/sbs/project/grassmere_metagenomic_Adriaansens/data
-cd /home/mad149/Metagenome_grassmere/Step4_filter_size/500b
-
+MAG_Path=
 module load seqtk/1.4-GCC-13.3.0
+seqtk seq -L 500 Assembl_3/Megahit/Megahit_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}/final.contigs.fa > /home/mad149/Metagenome_grassmere/Step4_filter_size/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MegaHit_500b_size_filtered.fna
+mkdir Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}
 
-seqtk seq -L 500 Assembl_3/Megahit/Megahit_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}/final.contigs.fa > /home/mad149/Metagenome_grassmere/Step4_filter_size/500b/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MegaHit_500bsize_filtered_contigs.fna
-
-
-
+module load BBMap/39.19-GCC-12.3.0
 module load SAMtools/1.21-GCC-13.3.0
 
-cd /home/mad149/Metagenome_grassmere/Step6_map_reads
-
-
-mkdir /home/mad149/Metagenome_grassmere/Step6_map_reads/Map_reads_contigs_MegaHit_500b_${array[$SLURM_ARRAY_TASK_ID]}
-
-cd /home/mad149/Metagenome_grassmere/Step6_map_reads/Map_reads_contigs_MegaHit_500b_${array[$SLURM_ARRAY_TASK_ID]}
-bbmap.sh threads=$SLURM_CPUS_PER_TASK ref=/home/mad149/Metagenome_grassmere/Step4_filter_size/500b/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MegaHit_500bsize_filtered_contigs.fna
-
-bbmap.sh threads=$SLURM_CPUS_PER_TASK minid=0.98 in=${MAG_Path}/YPQMX3_1_rerun_sample_10_10_R1.fastq.gz in2=${MAG_Path}/YPQMX3_1_rerun_sample_10_10_R2.fastq.gz  out=mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_contig.sam
-
-samtools view -H mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_contig.sam | grep "^@SQ" | sed 's/^@SQ\t//' | cut -f 1,2 | sed 's/SN://g; s/LN://g' | awk '$2 > 2000' > all_contigs_MegaHit${array[$SLURM_ARRAY_TASK_ID]}_greater_2000.txt
-
-samtools view -L all_contigs_MegaHit${array[$SLURM_ARRAY_TASK_ID]}_greater_2000.txt -h mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_contig.sam > mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_contig_filtered2000MegaHit.sam
+for i in {1..16}
+do
+    cd /home/mad149/Metagenome_grassmere/Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}
+    mkdir ${array[$SLURM_ARRAY_TASK_ID]}_vs_$i
+    #make ref
+    cd /home/mad149/Metagenome_grassmere/Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}/${array[$SLURM_ARRAY_TASK_ID]}_vs_$i
+    bbmap.sh threads=$SLURM_CPUS_PER_TASK ref=/home/mad149/Metagenome_grassmere/Step4_filter_size/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MegaHit_500b_size_filtered.fna
+    bbmap.sh threads=$SLURM_CPUS_PER_TASK minid=0.98 in=/home/mad149/Metagenome_grassmere/Trimm_2/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_sample_${array[$SLURM_ARRAY_TASK_ID]}_R1.qc.fastq.gz in2=/home/mad149/Metagenome_grassmere/Trimm_2/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_sample_${array[$SLURM_ARRAY_TASK_ID]}_R2.qc.fastq.gz out=/home/mad149/Metagenome_grassmere/Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}/${array[$SLURM_ARRAY_TASK_ID]}_vs_$i/mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_vs_${i}_MegaHit_scaffold.sam bamscript=sort_bam.sh
+    sh sort_bam.sh
+    samtools view -b /home/mad149/Metagenome_grassmere/Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}/${array[$SLURM_ARRAY_TASK_ID]}_vs_$i/mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_vs_${i}_MegaHit_scaffold_sorted.bam  `samtools view -H /home/mad149/Metagenome_grassmere/Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}/${array[$SLURM_ARRAY_TASK_ID]}_vs_$i/mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_vs_${i}_MegaHit_scaffold_sorted.bam |grep "^@SQ" |cut -f 2,3  |sed "s/.N://g" |awk '{if($2>1000){print $1}}' |tr "\n" " "` > /home/mad149/Metagenome_grassmere/Step6_map_reads/${array[$SLURM_ARRAY_TASK_ID]}/${array[$SLURM_ARRAY_TASK_ID]}_vs_$i/mapped_reads_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_vs_${i}_MegaHit_scaffold_sorted_filtered2000.bam 
+done

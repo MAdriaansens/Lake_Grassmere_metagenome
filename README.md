@@ -1,33 +1,40 @@
-module load Trimmomatic/0.39-Java-17
+Step -1 (getting the DNA)
+Get the DNA, the DNA was extracted using LiCl Phenol/Chloroform extractions.
+33, 30.4, 30.3, 25, 17, 11, 5 and ocean salinity (w/v) were sequenced. 
+DNA was then sequenced using NovoSeq. With technical duplicates for samples between 33-11. 
 
-trimmomatic PE -threads 1 -phred33 -trimlog Illumina_Nextera_adapter.faa \
-               Z37TGN_10_sample_10_R1_subset8000.fastq.gz Z37TGN_10_sample_10_R2_subset8000.fastq.gz\
-               Z37TGN_10_sample_10_R1_subset8000.qc.fastq.gz Z37TGN_10_sample_10_s1_subset8000.fastq.gz Z37TGN_10_sample_10_R2_subset8000.qc.fastq.gz Z37TGN_10_sample_10_s2_subset8000.fastq.gz \
-               ILLUMINACLIP:NexteraPE-PE.fa:1:25:7 SLIDINGWINDOW:4:30 MINLEN:80
-               
-#https://github.com/timflutre/trimmomatic/blob/master/adapters/NexteraPE-PE.fa
+Step 0 (XBLAST)
+Use (Diamond) xblast the raw reads against a pre-made Salt resistance DB.
+Using scripts run_xblast.sh and parsed using Parse_xblast.py
 
-module load BBMap/39.19-GCC-12.3.0
-bbduk.sh in=Z37TGN_10_sample_10_R1_subset8000.qc.fastq.gz out=Z37TGN_10_sample_10_R1_subset8000_bbduktrimmed.qc.fastq.gz ftl=2
+Step 1-2 (Filter reads using Trimmomatic)
+Run FastQC before trimming, then run Trimmomatic with NexteraPE-PE.fa, then perform FastQC again.
+Ensure that the poly-Gtail is removed
 
-module load FastQC/0.12.1-Java-11
-fastqc Z37TGN_10_sample_10_R1_subset8000_bbduktrimmed.qc.fastq.gz Z37TGN_10_sample_10_R2_subset8000.qc.fastq.gz
+Step3 (Assembly)
+Since the strain heterogeneity is such an issue we ran multiple assemblies.
+MegaHit, MetaSpades, Isolate Spades and Carefull Spades. 
 
-spades.py --meta -k 33,55,77,99,121 -t $SLURM_CPUS_PER_TASK \
-          -1 ${Trim}/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_sample_${array[$SLURM_ARRAY_TASK_ID]}_R1.qc.fastq.gz -2 ${Trim}/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_sample_${array[$SLURM_ARRAY_TASK_ID]}_R2.qc.fastq.gz \
-          -o spades_assembly_Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}
+Step4 (We size filter them, but this step was merged into mapping)
+SeqTK was used to filter the scaffolds based on size (>500bp)
 
-module load prodigal/2.6.3-GCCcore-12.3.0
-prodigal -i Assembl_3/spades_assembly_Z37TGN_15/contigs.fasta -o Prodigal/Z37GTN_15/Z37GTN_sample_15_genes.fna -a Prodigal/Z37GTN_15/Z37GTN_sample_15_proteins.faa -p meta
+Step5 (Mapping the all the reads to the scaffolds)
+The reads for each sample were mapped to all scaffolds > 2000bp, this increases the abudance data available and help with binning later down the line
+Mapping was done using BBmap (minid=0.98)
 
+Step6 (Binning)
+Binning was done using both MaxBin and MetaBat.
+Resulting in at least 8 versions (At the time of writing, before dRep).
 
-module load seqtk/1.4-GCC-13.3.0
-#only include contigs > 2Kb
-seqtk seq -L 2000 /home/mad149/Metagenome_grassmere/Assembl_3/spades_assembly_Z37TGN_15/contigs.fasta > Z37TGN_15_TrimmomaticJuly7_MetaSpades_2Kbsize_filtered.fasta
+Step7 (Quality assessment)
+Since we wanted our bin dereplciation to be informed by other metrics aside from dRep, and since these metrice were usefull for downstream use/publcation we used the following tools.
+1. CheckM2 (Completeness, Contamination, added benefit of translating nt into aa files)
+2. GTDBtk Assess the initial taxonomic grouping of the bins
+3. Aragorn, asses presence of tRNAs
+4. Barrnap, assess presence of sRNAs
+5. xblast/blastp vs the nt and aa files, with as db the salt protein database from step 0.
 
-#for Sample 15 no contigs exceed this size threshold
+6. merging all this info into one excel sheet
 
-module load BBMap/39.19-GCC-12.3.0
-cd /home/mad149/Metagenome_grassmere/Step5_BBMap
-module load BBMap/39.19-GCC-12.3.0
-stats.sh in=/home/mad149/Metagenome_grassmere/Step4_filter_size/Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MetaSpades_2Kbsize_filtered.fna 2>&1 > Z37TGN_${array[$SLURM_ARRAY_TASK_ID]}_TrimmomaticJuly7_MetaSpades_size_filtered_BBmap.txt
+Step 8 (bin dereplication)
+Using dRep all the bins were dereplicated + Checkm was run for strain hetereogeneity info. 

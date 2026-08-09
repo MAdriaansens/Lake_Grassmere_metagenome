@@ -1,0 +1,283 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+```{r}
+LGM_data<- read.delim('/home/mad149/Metagenome_grassmere/xblast_output_5Juli_LGM_Incl_extrafocus_Kef.tsv', sep='\t', stringsAsFactors = TRUE)
+```
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+LGM_data$Salinity <- c(17.2, 22.3, 11.2, 32.3, 0.001, 3.4, 30.8, 30.2, 31.2, 5.8, 17.2, 32.3, 11.2, 22.3, 30.8, 30.2)
+```
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+
+
+Water_data<- read.delim('/home/mad149/chapter_meta_analysis/metadata/Studies_salinity_metadata_All - Studies_salinity_metadata_water.csv(8).tsv', sep='\t', stringsAsFactors = TRUE)
+
+Water_data$Salinity<- as.numeric(gsub( ',','.', Water_data$Salinity))
+Water_data$pH<- as.numeric(gsub( ',','.',Water_data$pH))
+
+
+xblast_half <- read.delim('/home/mad149/chapter_meta_analysis/xblast_output_may20_641_out_of_1116Kef.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_df_Aqua <- merge(Water_data, xblast_half, by = "SRA_id")
+merged_df_Aqua$Environment <- 'Aqueous'
+
+#install.packages("readr")
+library(readr)
+
+# Write your data frame to a TSV file
+write.table(merged_df_Aqua, file = "Studies_salinity_metadata_All_aquatic_Jun13th.tsv", sep = "\t", row.names = FALSE, quote = FALSE)
+```
+
+
+
+```{r}
+
+
+merged_df_Aqua$MIP_count <- merged_df_Aqua$MIP_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$ClcA_count <- merged_df_Aqua$ClcA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$MscS_count <- merged_df_Aqua$MscS_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$MscL_count <- merged_df_Aqua$MscL_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$OpuAC_count <- merged_df_Aqua$OpuAC_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Na_ala_count <- merged_df_Aqua$Na_ala_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$CorA_count <- merged_df_Aqua$CorA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Na_Ca_count <- merged_df_Aqua$Na_Ca_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$BCCT_count <- merged_df_Aqua$BCCT_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$MgtE_count <- merged_df_Aqua$MgtE_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$EctC_count <- merged_df_Aqua$EctC_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$MnhE_count <- merged_df_Aqua$MnhE_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Trehalose_PPase_count <- merged_df_Aqua$Trehalose_PPase_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$TrkH_count <- merged_df_Aqua$TrkH_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kup_count <- merged_df_Aqua$Kup_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Hppase_count <- merged_df_Aqua$Hppase_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$NhaB_count <- merged_df_Aqua$NhaB_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$NhaC_count <- merged_df_Aqua$NhaC_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$NhaD_count <- merged_df_Aqua$NhaD_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kdp_count <- merged_df_Aqua$Kdp_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$MtrA_count <- merged_df_Aqua$MtrA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$AApermease_count <- merged_df_Aqua$AApermease_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$BranchedchainAA_transp_count <- merged_df_Aqua$BranchedchainAA_transp_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$TreT_count <- merged_df_Aqua$TreT_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$NqrA_count <- merged_df_Aqua$NqrA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$KimA_count <- merged_df_Aqua$KimA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Betain_ald_dehyd_count <- merged_df_Aqua$Betain_ald_dehyd_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+
+
+merged_df_Aqua$total_CPA_count <- merged_df_Aqua$total_CPA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$CPA1_count <- merged_df_Aqua$CPA1_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$CPA1_SL_count <- merged_df_Aqua$CPA1_SL_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$CHX_count <- merged_df_Aqua$CHX_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+
+merged_df_Aqua$Kef_count <- merged_df_Aqua$Kef_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+
+
+
+merged_df_Aqua$GerN_count <- merged_df_Aqua$GerN_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$SOD2_count <- merged_df_Aqua$SOD2_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$NhaS5_count <- merged_df_Aqua$NhaS5_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$NhaP_CPA1_count <- merged_df_Aqua$NhaP_CPA1_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+
+merged_df_Aqua$NhaA_count <- merged_df_Aqua$NhaA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Uncharacterized_CPA_count <- merged_df_Aqua$Uncharacterized_CPA_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Undescribed_CPA1_count <- merged_df_Aqua$Undescribed_CPA1_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$UndProkarya_CPA1_IDK_count <- merged_df_Aqua$UndProkarya_CPA1_IDK_count/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+
+merged_df_Aqua$Kef_subclade29950<- merged_df_Aqua$Kef_subclade29950/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade42457<- merged_df_Aqua$Kef_subclade42457/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44199<- merged_df_Aqua$Kef_subclade44199/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade42947<- merged_df_Aqua$Kef_subclade42947/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade42415<- merged_df_Aqua$Kef_subclade42415/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44013<- merged_df_Aqua$Kef_subclade44013/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44600<- merged_df_Aqua$Kef_subclade44600/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43808<- merged_df_Aqua$Kef_subclade43808/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44514<- merged_df_Aqua$Kef_subclade44514/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43312<- merged_df_Aqua$Kef_subclade43312/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43225<- merged_df_Aqua$Kef_subclade43225/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43377<- merged_df_Aqua$Kef_subclade43377/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43531<- merged_df_Aqua$Kef_subclade43531/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43598<- merged_df_Aqua$Kef_subclade43598/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43720<- merged_df_Aqua$Kef_subclade43720/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44121<- merged_df_Aqua$Kef_subclade44121/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43954<- merged_df_Aqua$Kef_subclade43954/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade43914<- merged_df_Aqua$Kef_subclade43914/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade42396<- merged_df_Aqua$Kef_subclade42396/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44582<- merged_df_Aqua$Kef_subclade44582/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_subclade44712<- merged_df_Aqua$Kef_subclade44712/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Kef_group38142<- merged_df_Aqua$Kef_group38142/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$Missing_kef<- merged_df_Aqua$Missing_kef/(merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)
+merged_df_Aqua$total_CPA_noKef_count <- merged_df_Aqua$total_CPA_count - merged_df_Aqua$Kef_count
+
+merged_df_Aqua$total_NaExp <- merged_df_Aqua$total_CPA_count + merged_df_Aqua$MnhE_count + merged_df_Aqua$Hppase_count + merged_df_Aqua$MtrA_count + merged_df_Aqua$NhaB_count + merged_df_Aqua$NhaC_count + merged_df_Aqua$NhaD_count + merged_df_Aqua$NqrA_count- merged_df_Aqua$Kef_count
+merged_df_Aqua$total_KImp <- merged_df_Aqua$TrkH_count + merged_df_Aqua$Kdp_count + merged_df_Aqua$KimA_count + merged_df_Aqua$Kup_count
+merged_df_Aqua$total_OsImp <-  merged_df_Aqua$BCCT_count + merged_df_Aqua$OpuAC_count
+merged_df_Aqua$total_MgImp <- merged_df_Aqua$MgtE_count + merged_df_Aqua$CorA_count 
+merged_df_Aqua$total_Synth <- merged_df_Aqua$EctC_count + merged_df_Aqua$TreT_count + merged_df_Aqua$Trehalose_PPase_count + merged_df_Aqua$Betain_ald_dehyd_count 
+
+cleanAqua <- merged_df_Aqua[!is.na(merged_df_Aqua$Salinity),]
+
+```
+
+```{r}
+
+
+
+LGM_data$MIP_count <- LGM_data$MIP_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$ClcA_count <- LGM_data$ClcA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$MscS_count <- LGM_data$MscS_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$MscL_count <- LGM_data$MscL_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$OpuAC_count <- LGM_data$OpuAC_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Na_ala_count <- LGM_data$Na_ala_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$CorA_count <- LGM_data$CorA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Na_Ca_count <- LGM_data$Na_Ca_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$BCCT_count <- LGM_data$BCCT_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$MgtE_count <- LGM_data$MgtE_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$EctC_count <- LGM_data$EctC_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$MnhE_count <- LGM_data$MnhE_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Trehalose_PPase_count <- LGM_data$Trehalose_PPase_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$TrkH_count <- LGM_data$TrkH_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kup_count <- LGM_data$Kup_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Hppase_count <- LGM_data$Hppase_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$NhaB_count <- LGM_data$NhaB_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$NhaC_count <- LGM_data$NhaC_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$NhaD_count <- LGM_data$NhaD_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kdp_count <- LGM_data$Kdp_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$MtrA_count <- LGM_data$MtrA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$AApermease_count <- LGM_data$AApermease_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$BranchedchainAA_transp_count <- LGM_data$BranchedchainAA_transp_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$TreT_count <- LGM_data$TreT_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$NqrA_count <- LGM_data$NqrA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$KimA_count <- LGM_data$KimA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Betain_ald_dehyd_count <- LGM_data$Betain_ald_dehyd_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+
+
+LGM_data$total_CPA_count <- LGM_data$total_CPA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$CPA1_count <- LGM_data$CPA1_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$CPA1_SL_count <- LGM_data$CPA1_SL_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$CHX_count <- LGM_data$CHX_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+
+LGM_data$Kef_count <- LGM_data$Kef_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+
+
+
+LGM_data$GerN_count <- LGM_data$GerN_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$SOD2_count <- LGM_data$SOD2_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$NhaS5_count <- LGM_data$NhaS5_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$NhaP_CPA1_count <- LGM_data$NhaP_CPA1_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+
+LGM_data$NhaA_count <- LGM_data$NhaA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Uncharacterized_CPA_count <- LGM_data$Uncharacterized_CPA_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Undescribed_CPA1_count <- LGM_data$Undescribed_CPA1_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$UndProkarya_CPA1_IDK_count <- LGM_data$UndProkarya_CPA1_IDK_count/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+
+LGM_data$Kef_subclade29950<- LGM_data$Kef_subclade29950/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade42457<- LGM_data$Kef_subclade42457/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44199<- LGM_data$Kef_subclade44199/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade42947<- LGM_data$Kef_subclade42947/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade42415<- LGM_data$Kef_subclade42415/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44013<- LGM_data$Kef_subclade44013/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44600<- LGM_data$Kef_subclade44600/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43808<- LGM_data$Kef_subclade43808/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44514<- LGM_data$Kef_subclade44514/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43312<- LGM_data$Kef_subclade43312/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43225<- LGM_data$Kef_subclade43225/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43377<- LGM_data$Kef_subclade43377/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43531<- LGM_data$Kef_subclade43531/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43598<- LGM_data$Kef_subclade43598/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43720<- LGM_data$Kef_subclade43720/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44121<- LGM_data$Kef_subclade44121/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43954<- LGM_data$Kef_subclade43954/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade43914<- LGM_data$Kef_subclade43914/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade42396<- LGM_data$Kef_subclade42396/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44582<- LGM_data$Kef_subclade44582/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_subclade44712<- LGM_data$Kef_subclade44712/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Kef_group38142<- LGM_data$Kef_group38142/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$Missing_kef<- LGM_data$Missing_kef/(LGM_data$RpS2_count + LGM_data$RpL4_count)
+LGM_data$total_CPA_noKef_count <- LGM_data$total_CPA_count - LGM_data$Kef_count
+
+LGM_data$total_NaExp <- LGM_data$total_CPA_count + LGM_data$MnhE_count + LGM_data$Hppase_count + LGM_data$MtrA_count + LGM_data$NhaB_count + LGM_data$NhaC_count + LGM_data$NhaD_count + LGM_data$NqrA_count- LGM_data$Kef_count
+LGM_data$total_KImp <- LGM_data$TrkH_count + LGM_data$Kdp_count + LGM_data$KimA_count + LGM_data$Kup_count
+LGM_data$total_OsImp <-  LGM_data$BCCT_count + LGM_data$OpuAC_count
+LGM_data$total_MgImp <- LGM_data$MgtE_count + LGM_data$CorA_count 
+LGM_data$total_Synth <- LGM_data$EctC_count + LGM_data$TreT_count + LGM_data$Trehalose_PPase_count + LGM_data$Betain_ald_dehyd_count 
+```
+
+```{r}
+
+
+```
+
+```{r}
+par(mfrow=c(3,3))
+splinefitTDEIKAqua <- smooth.spline(cleanAqua$Salinity, cleanAqua$DEIK_ratio)
+plot(cleanAqua$Salinity, cleanAqua$DEIK_ratio, pch = 20,
+     col = adjustcolor("black", alpha.f = 0.1), 
+     cex =4,
+     main = "DEIK ratio vs Salinity",
+     xlab = "Salinity (w/v) %",
+    ylab = "DEIK ratio",cex.main = 4, cex.lab = 1.5)+ lines(splinefitTDEIKAqua, col = "black", lwd = 4)+abline(v = c(0.1, 3.5, 14, 25), col = "red") + points(x=LGM_data$Salinity, y=LGM_data$DEIK_ratio, col='orange1',pch=16, cex=3, alpha.f=0.2)
+ 
+splinefit_KimpAq <- smooth.spline(cleanAqua$Salinity, cleanAqua$total_KImp)
+
+plot(cleanAqua$Salinity, cleanAqua$total_KImp, pch = 20,
+     col = adjustcolor("red", alpha.f = 0.4), 
+     cex = 4,
+     cex.axis = 2,
+     main = "Aq K+ imp",
+     xlab = "Salinity) %(w/v)",
+      ylab = "Relative abundane",cex.main = 4, cex.lab = 4) + lines(splinefit_KimpAq, col='red', lwd=10) +abline(v = c(3.12, 14.2, 25.1), col = "black", lwd=4)+ points(x=LGM_data$Salinity, y=LGM_data$total_KImp, col='orange1',pch=16, cex=3, alpha.f=0.2)+ lines(splinefitTDEIKAqua, col='black', lwd=8)
+
+gam(total_OsImp~Salinity, data=cleanAqua)
+
+splinefit_OsImpAq <- smooth.spline(cleanAqua$total_OsImp ~ cleanAqua$Salinity, spar=0.549824)
+
+ plot(cleanAqua$Salinity, cleanAqua$total_OsImp, pch = 20, 
+     col = adjustcolor("gold2", alpha.f = 0.4), 
+     cex = 4,
+     cex.axis=2,
+     main = "Osmolyte importers",
+     xlab = "Log10(Salinity) %(w/v)",
+      ylab = "Relative abundane",cex.main = 4, cex.lab = 4) + lines(splinefit_OsImpAq, col ="gold2", lwd = 10)+abline(v = c(3.12, 14.2, 25.1), col = "black", lwd=4)+ points(x=LGM_data[LGM_data$Salinity>1,]$Salinity, y=LGM_data[LGM_data$Salinity>1,]$total_OsImp, col='orange1',pch=16, cex=3, alpha.f=0.2)  
+ 
+gam(total_NaExp ~ Salinity, data=cleanAqua)
+splinefit_NaExAq <- smooth.spline(cleanAqua$total_NaExp ~ cleanAqua$Salinity)
+plot(cleanAqua$Salinity, cleanAqua$total_NaExp, pch = 20, 
+     col = adjustcolor("pink", alpha.f = 0.4), 
+     cex = 4,
+     cex.axis = 2,
+     main = "Sodium exporters",
+     xlab = "Log10(Salinity) %(w/v)",
+      ylab = "Relative abundane",cex.main = 4, cex.lab = 4) + lines(splinefit_NaExAq, col='pink2', lwd=10)+abline(v = c(3.12, 14.2, 25.1), col = "black", lwd=4) + lines(splinefitTDEIKAqua, col='black', lwd=8)+ points(x=LGM_data[LGM_data$Salinity>1,]$Salinity, y=LGM_data[LGM_data$Salinity>1,]$total_NaExp, col='orange1',pch=16, cex=3, alpha.f=0.2) 
+ 
+#spline_fitNa_CaAq<-smooth.spline(cleanAqua$Na_Ca_count ~ cleanAqua$Salinity)
+#plot(cleanAqua$Salinity, cleanAqua$Na_Ca_count, pch = 20,
+#     col = adjustcolor("deepskyblue", alpha.f = 0.4), 
+#     cex = 4,
+#     cex.axis=2,
+#     main = "Aq Na+/Ca2+ exp",
+#     xlab = "Log10(Salinity) %(w/v)",
+#      ylab = "Relative abundane",cex.main = 4, cex.lab = 4)+ lines(spline_fitNa_CaAq, col = "deepskyblue", lwd = 10)+abline(v = c(log10(0.1), log10(14)), col = "black", lwd=4) + lines(splinefitTDEIKAqua, col='black', lwd=8)+abline(v = c(3.5,25), col = "black", lwd=4) 
+
+gam(total_Synth ~ Salinity, data=cleanAqua)
+
+splinefut_SynthAq <- smooth.spline(cleanAqua$total_Synth ~ cleanAqua$Salinity)
+plot(cleanAqua$Salinity, cleanAqua$total_Synth, pch = 20, 
+     col = adjustcolor("green", alpha.f = 0.4), 
+     cex = 4,
+     cex.axis=2,
+     main = "Aq Os Synth",
+     xlab = "Log10(Salinity) %(w/v)",
+      ylab = "Relative abundane",cex.main = 4, cex.lab = 4) + lines(splinefut_SynthAq, col ="green", lwd = 10)+abline(v = c(3.12, 14.2, 25.1), col = "black", lwd=4) + lines(splinefitTDEIKAqua, col='black', lwd=8)+ points(x=LGM_data[LGM_data$Salinity>1,]$Salinity, y=LGM_data[LGM_data$Salinity>1,]$total_Synth, col='orange1',pch=16, cex=3, alpha.f=0.2) 
+
+
+```
+

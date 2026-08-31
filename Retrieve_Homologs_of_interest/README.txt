@@ -4,6 +4,8 @@ This was Metabat + Isolate Metaspades
 Step1 run Diamond BlastP vs MetaBat_isolate bins
 We then used the prodigal used by CheckM2 as a subject and the osmotic database as a query. 
 (this gives us the chance to also pull other proteins)
+diamond blastp --query $bin --db ${DB} --max-target-seqs 1 --evalue 0.00001 --threads $SLURM_CPUS_PER_TASK --outfmt 6 qseqid sseqid slen evalue bitscore qseq --out Diamond_blastp/${entry}_blastp_vs_protein_Database.tsv 
+done
 
 Step2 Retrieve and check the FL sequences hit.
 We retrieve the HPPase, TrkH, and CPA fl sequences. Then put HMMaligned these to their respective HMMs and used Parse_stockholm_fl.py.

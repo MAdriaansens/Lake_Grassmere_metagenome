@@ -39,7 +39,7 @@ with open('MetaBat_isolate_postDrep_CPAs.fasta'.format(directory), 'w') as outfi
                         for line in parse:
                             if '_Protein' in line:
                                 sequence=line.split('\n')[0].split('\t')[-1]
-                                if len(sequence) > 258:                                  
+                                if len(sequence) > 262:                                  
                                     if '_blastp_' in blastp:
                                         title = '>' + (blastp.split('/')[-1].split('_blastp_vs_protein')[0]) + '_' + line.split('\t')[0] + '_CPA_{}_protein:'.format(count)+ line.split('\t')[1].split('Protein:')[-1]
                                         
@@ -64,7 +64,7 @@ with open('MetaBat_isolate_postDrep_Hpase.fasta', 'w') as outfile:
                             if 'H_PPase' in line:
                                 print(line)
                                 sequence=line.split('\n')[0].split('\t')[-1]
-                                if len(sequence) > 453:                                  
+                                if len(sequence) > 452:                                  
                                     if '_blastp_' in blastp:
                                         title = '>' + (blastp.split('/')[-1].split('_blastp_vs_protein')[0]) + '_' + line.split('\t')[0] + '_Hppase_{}_protein:'.format(count)+ line.split('\t')[1].split('Protein:')[-1]
                                         
@@ -88,7 +88,7 @@ with open('MetaBat_isolate_postDrep_TrkH.fasta'.format(directory), 'w') as outfi
                             if 'TrkH' in line:
                                 print(line)
                                 sequence=line.split('\n')[0].split('\t')[-1]
-                                if len(sequence) > 351:                                  
+                                if len(sequence) > 350:                                  
                                     if '_blastp_' in blastp:
                                         title = '>' + (blastp.split('/')[-1].split('_blastp_vs_protein')[0]) + '_' + line.split('\t')[0] + '_TrkH_{}_protein:'.format(count)+ line.split('\t')[1].split('Protein:')[-1]
                                         

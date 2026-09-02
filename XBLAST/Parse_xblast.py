@@ -52,7 +52,6 @@ print(len(SRR_entries))
 ID = list(set(SRR_entries))
 print('ids done {}'.format(len(ID)))
 
-
     
 def return_dictionary_diamond_blast(Directory, SRR_id):
     SRR_directory = {}
@@ -315,7 +314,8 @@ with open('/home/mad149/Metagenome_grassmere/xblast_output_5Juli_LGM_Incl_extraf
                                 Kef_subclade44712+=1
                             else:
                                 Missing_kef +=1
-        
+                        #in the old salinity protein database CPA1 is CPA1, however in follow up versions it is called NHX
+
                         elif xblast_output_dictionary[key][0].split('Protein:')[-1]== 'CPA1':
                             CPA1_count = CPA1_count + 1
                         elif xblast_output_dictionary[key][0].split('Protein:')[-1] == 'NhaA':

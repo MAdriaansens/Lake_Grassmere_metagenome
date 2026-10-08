@@ -1,0 +1,808 @@
+---
+title: "Protein_diversity"
+output: html_document
+date: "2026-09-24"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR1<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_1_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR2<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_2_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_1_2 <- merge(Sample_NR1, Sample_NR2, by = "Protein_id", all = TRUE)
+merged_1_2[is.na(merged_1_2)] <- 0
+merged_1_2$Total_reads_mapped_to_protein <- merged_1_2$Reads_mapped_to_protein.x + merged_1_2$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_1_2 <- merged_1_2 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_1_2 <- merged_1_2[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_1_2 <- sum(Final_merged_1_2$Total_reads_mapped_to_protein)
+
+Final_merged_1_2$ratio <-(Final_merged_1_2$Total_reads_mapped_to_protein)/Nsum_1_2
+Final_merged_1_2$intermediate <- Final_merged_1_2$ratio*(log2(Final_merged_1_2$ratio))
+Shannon_index_NR_1_2 <- -sum(Final_merged_1_2$intermediate)
+Shannon_index_NR_1_2
+Richness_NR_1_2 <- nrow(Final_merged_1_2)
+Nsum_1_2
+
+
+summary_Subfamilies_NR_1_2 <- Final_merged_1_2 %>%
+  group_by(subfamily.x) %>%
+  summarise(total_value = sum(Total_reads_mapped_to_protein))
+Richness_subfamilies_NR_1_2 <- nrow(summary_Subfamilies_NR_1_2)
+Richness_subfamilies_NR_1_2
+summary_Subfamilies_NR_1_2$ratio <- (summary_Subfamilies_NR_1_2$total_value/Nsum_1_2)
+summary_Subfamilies_NR_1_2$intermediate <- summary_Subfamilies_NR_1_2$ratio*(log2(summary_Subfamilies_NR_1_2$ratio))
+Shannon_index_NR_1_2_subfamily <- -sum(summary_Subfamilies_NR_1_2$intermediate)
+Shannon_index_NR_1_2_subfamily
+```
+
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_1<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_1_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR_70_2<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_2_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_1_2 <- merge(Sample_NR_70_1, Sample_NR_70_2, by = "Protein_id", all = TRUE)
+merged_1_2[is.na(merged_1_2)] <- 0
+merged_1_2$Total_reads_mapped_to_protein <- merged_1_2$Reads_mapped_to_protein.x + merged_1_2$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_1_2 <- merged_1_2 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_1_2 <- merged_1_2[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_1_2 <- sum(Final_merged_1_2$Total_reads_mapped_to_protein)
+
+Final_merged_1_2$ratio <-(Final_merged_1_2$Total_reads_mapped_to_protein)/Nsum_1_2
+Final_merged_1_2$intermediate <- Final_merged_1_2$ratio*(log2(Final_merged_1_2$ratio))
+Shannon_index_NR_70_1_2 <- -sum(Final_merged_1_2$intermediate)
+Shannon_index_NR_70_1_2
+Richness_NR_70_1_2 <- nrow(Final_merged_1_2)
+Richness_NR_70_1_2
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_1<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_1_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_Tree_2<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_2_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_1_2 <- merge(Sample_Tree_1, Sample_Tree_2, by = "Protein_id", all = TRUE)
+merged_1_2[is.na(merged_1_2)] <- 0
+merged_1_2$Total_reads_mapped_to_protein <- merged_1_2$Reads_mapped_to_protein.x + merged_1_2$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_1_2 <- merged_1_2 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_1_2 <- merged_1_2[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_1_2 <- sum(Final_merged_1_2$Total_reads_mapped_to_protein)
+
+Final_merged_1_2$ratio <-(Final_merged_1_2$Total_reads_mapped_to_protein)/Nsum_1_2
+Final_merged_1_2$intermediate <- Final_merged_1_2$ratio*(log2(Final_merged_1_2$ratio))
+Shannon_index_Tree_1_2 <- -sum(Final_merged_1_2$intermediate)
+Shannon_index_Tree_1_2
+Richness_Tree_1_2 <- nrow(Final_merged_1_2)
+Richness_Tree_1_2
+```
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR3<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_3_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR4<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_4_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_3_4 <- merge(Sample_NR3, Sample_NR4, by = "Protein_id", all = TRUE)
+merged_3_4[is.na(merged_3_4)] <- 0
+merged_3_4$Total_reads_mapped_to_protein <- merged_3_4$Reads_mapped_to_protein.x + merged_3_4$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_3_4 <- merged_3_4 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_3_4 <- merged_3_4[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+Nsum_3_4 <- sum(Final_merged_3_4$Total_reads_mapped_to_protein)
+
+Final_merged_3_4$ratio <-(Final_merged_3_4$Total_reads_mapped_to_protein)/Nsum_3_4
+Final_merged_3_4$intermediate <- Final_merged_3_4$ratio*(log2(Final_merged_3_4$ratio))
+Shannon_index_NR_3_4 <- -sum(Final_merged_3_4$intermediate)
+Shannon_index_NR_3_4
+Richness_NR_3_4 <- nrow(Final_merged_3_4)
+
+summary_Subfamilies_NR_3_4 <- Final_merged_3_4 %>%
+  group_by(subfamily.x) %>%
+  summarise(total_value = sum(Total_reads_mapped_to_protein))
+Richness_subfamilies_NR_3_4 <- nrow(summary_Subfamilies_NR_3_4)
+Richness_subfamilies_NR_3_4
+summary_Subfamilies_NR_3_4$ratio <- (summary_Subfamilies_NR_3_4$total_value/Nsum_3_4)
+summary_Subfamilies_NR_3_4$intermediate <- summary_Subfamilies_NR_3_4$ratio*(log2(summary_Subfamilies_NR_3_4$ratio))
+Shannon_index_NR_3_4_subfamily <- -sum(summary_Subfamilies_NR_3_4$intermediate)
+Shannon_index_NR_3_4_subfamily
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_3<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_3_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR_70_4<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_4_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_3_4 <- merge(Sample_NR_70_3, Sample_NR_70_4, by = "Protein_id", all = TRUE)
+merged_3_4[is.na(merged_3_4)] <- 0
+merged_3_4$Total_reads_mapped_to_protein <- merged_3_4$Reads_mapped_to_protein.x + merged_3_4$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_3_4 <- merged_3_4 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_3_4 <- merged_3_4[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_3_4 <- sum(Final_merged_3_4$Total_reads_mapped_to_protein)
+
+Final_merged_3_4$ratio <-(Final_merged_3_4$Total_reads_mapped_to_protein)/Nsum_3_4
+Final_merged_3_4$intermediate <- Final_merged_3_4$ratio*(log2(Final_merged_3_4$ratio))
+Shannon_index_NR_70_3_4 <- -sum(Final_merged_3_4$intermediate)
+Shannon_index_NR_70_3_4
+Richness_NR_70_3_4 <- nrow(Final_merged_3_4)
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_3<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_3_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_Tree_4<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_4_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_3_4 <- merge(Sample_Tree_3, Sample_Tree_4, by = "Protein_id", all = TRUE)
+merged_3_4[is.na(merged_3_4)] <- 0
+merged_3_4$Total_reads_mapped_to_protein <- merged_3_4$Reads_mapped_to_protein.x + merged_3_4$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_3_4 <- merged_3_4 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_3_4 <- merged_3_4[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_3_4 <- sum(Final_merged_3_4$Total_reads_mapped_to_protein)
+
+Final_merged_3_4$ratio <-(Final_merged_3_4$Total_reads_mapped_to_protein)/Nsum_3_4
+Final_merged_3_4$intermediate <- Final_merged_3_4$ratio*(log2(Final_merged_3_4$ratio))
+Shannon_index_Tree_3_4 <- -sum(Final_merged_3_4$intermediate)
+Shannon_index_Tree_3_4
+Richness_Tree_3_4 <- nrow(Final_merged_3_4)
+Richness_Tree_3_4 
+```
+
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR5<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_5_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR6<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_6_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_5_6 <- merge(Sample_NR5, Sample_NR6, by = "Protein_id", all = TRUE)
+merged_5_6[is.na(merged_5_6)] <- 0
+merged_5_6$Total_reads_mapped_to_protein <- merged_5_6$Reads_mapped_to_protein.x + merged_5_6$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_5_6 <- merged_5_6 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_5_6 <- merged_5_6[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+Nsum_5_6 <- sum(Final_merged_3_4$Total_reads_mapped_to_protein)
+
+Final_merged_5_6$ratio <-(Final_merged_5_6$Total_reads_mapped_to_protein)/Nsum_5_6
+Final_merged_5_6$intermediate <- Final_merged_5_6$ratio*(log2(Final_merged_5_6$ratio))
+Shannon_index_NR_5_6 <- -sum(Final_merged_5_6$intermediate)
+Shannon_index_NR_5_6
+Richness_NR_5_6 <- nrow(Final_merged_5_6)
+
+
+summary_Subfamilies_NR_5_6 <- Final_merged_5_6 %>%
+  group_by(subfamily.x) %>%
+  summarise(total_value = sum(Total_reads_mapped_to_protein))
+Richness_subfamilies_NR_5_6 <- nrow(summary_Subfamilies_NR_5_6)
+Richness_subfamilies_NR_5_6
+summary_Subfamilies_NR_5_6$ratio <- (summary_Subfamilies_NR_5_6$total_value/Nsum_5_6)
+summary_Subfamilies_NR_5_6$intermediate <- summary_Subfamilies_NR_5_6$ratio*(log2(summary_Subfamilies_NR_5_6$ratio))
+Shannon_index_NR_5_6_subfamily <- -sum(summary_Subfamilies_NR_5_6$intermediate)
+Shannon_index_NR_5_6_subfamily
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_5<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_5_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR_70_6<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_6_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_5_6 <- merge(Sample_NR_70_5, Sample_NR_70_6, by = "Protein_id", all = TRUE)
+merged_5_6[is.na(merged_5_6)] <- 0
+merged_5_6$Total_reads_mapped_to_protein <- merged_5_6$Reads_mapped_to_protein.x + merged_5_6$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_5_6 <- merged_5_6 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_5_6 <- merged_5_6[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_5_6 <- sum(Final_merged_5_6$Total_reads_mapped_to_protein)
+
+Final_merged_5_6$ratio <-(Final_merged_5_6$Total_reads_mapped_to_protein)/Nsum_5_6
+Final_merged_5_6$intermediate <- Final_merged_5_6$ratio*(log2(Final_merged_5_6$ratio))
+Shannon_index_NR_70_5_6 <- -sum(Final_merged_5_6$intermediate)
+Shannon_index_NR_70_5_6
+Richness_NR_70_5_6 <- nrow(Final_merged_5_6)
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_5<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_5_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_Tree_6<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_6_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_5_6 <- merge(Sample_Tree_5, Sample_Tree_6, by = "Protein_id", all = TRUE)
+merged_5_6[is.na(merged_5_6)] <- 0
+merged_5_6$Total_reads_mapped_to_protein <- merged_5_6$Reads_mapped_to_protein.x + merged_5_6$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_5_6 <- merged_5_6 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_5_6 <- merged_5_6[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_5_6 <- sum(Final_merged_5_6$Total_reads_mapped_to_protein)
+
+Final_merged_5_6$ratio <-(Final_merged_5_6$Total_reads_mapped_to_protein)/Nsum_5_6
+Final_merged_5_6$intermediate <- Final_merged_5_6$ratio*(log2(Final_merged_5_6$ratio))
+Shannon_index_Tree_5_6 <- -sum(Final_merged_5_6$intermediate)
+Shannon_index_Tree_5_6
+Richness_Tree_5_6 <- nrow(Final_merged_5_6)
+Richness_Tree_5_6
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR7<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_7_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR8<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_8_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_7_8 <- merge(Sample_NR7, Sample_NR8, by = "Protein_id", all = TRUE)
+merged_7_8[is.na(merged_7_8)] <- 0
+merged_7_8$Total_reads_mapped_to_protein <- merged_7_8$Reads_mapped_to_protein.x + merged_7_8$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_7_8 <- merged_7_8 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_7_8 <- merged_7_8[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+Nsum_7_8 <- sum(Final_merged_3_4$Total_reads_mapped_to_protein)
+
+Final_merged_7_8$ratio <-(Final_merged_7_8$Total_reads_mapped_to_protein)/Nsum_7_8
+Final_merged_7_8$intermediate <- Final_merged_7_8$ratio*(log2(Final_merged_7_8$ratio))
+Shannon_index_NR_7_8 <- -sum(Final_merged_7_8$intermediate)
+Shannon_index_NR_7_8
+Richness_NR_7_8 <- nrow(Final_merged_7_8)
+
+summary_Subfamilies_NR_7_8 <- Final_merged_7_8 %>%
+  group_by(subfamily.x) %>%
+  summarise(total_value = sum(Total_reads_mapped_to_protein))
+Richness_subfamilies_NR_7_8 <- nrow(summary_Subfamilies_NR_7_8)
+Richness_subfamilies_NR_7_8
+summary_Subfamilies_NR_7_8$ratio <- (summary_Subfamilies_NR_7_8$total_value/Nsum_7_8)
+summary_Subfamilies_NR_7_8$intermediate <- summary_Subfamilies_NR_7_8$ratio*(log2(summary_Subfamilies_NR_7_8$ratio))
+Shannon_index_NR_7_8_subfamily <- -sum(summary_Subfamilies_NR_7_8$intermediate)
+Shannon_index_NR_7_8_subfamily
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_7<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_7_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR_70_8<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_8_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_7_8 <- merge(Sample_NR_70_7, Sample_NR_70_8, by = "Protein_id", all = TRUE)
+merged_7_8[is.na(merged_7_8)] <- 0
+merged_7_8$Total_reads_mapped_to_protein <- merged_7_8$Reads_mapped_to_protein.x + merged_7_8$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_7_8 <- merged_7_8 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_7_8 <- merged_7_8[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_7_8 <- sum(Final_merged_7_8$Total_reads_mapped_to_protein)
+
+Final_merged_7_8$ratio <-(Final_merged_7_8$Total_reads_mapped_to_protein)/Nsum_7_8
+Final_merged_7_8$intermediate <- Final_merged_7_8$ratio*(log2(Final_merged_7_8$ratio))
+Shannon_index_NR_70_7_8 <- -sum(Final_merged_7_8$intermediate)
+Shannon_index_NR_70_7_8
+Richness_NR_70_7_8 <- nrow(Final_merged_7_8)
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_7<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_7_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_Tree_8<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_8_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_7_8 <- merge(Sample_Tree_7, Sample_Tree_8, by = "Protein_id", all = TRUE)
+merged_7_8[is.na(merged_7_8)] <- 0
+merged_7_8$Total_reads_mapped_to_protein <- merged_7_8$Reads_mapped_to_protein.x + merged_7_8$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_7_8 <- merged_7_8 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_7_8 <- merged_7_8[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_7_8 <- sum(Final_merged_7_8$Total_reads_mapped_to_protein)
+
+Final_merged_7_8$ratio <-(Final_merged_7_8$Total_reads_mapped_to_protein)/Nsum_7_8
+Final_merged_7_8$intermediate <- Final_merged_7_8$ratio*(log2(Final_merged_7_8$ratio))
+Shannon_index_Tree_7_8 <- -sum(Final_merged_7_8$intermediate)
+Shannon_index_Tree_7_8
+Richness_Tree_7_8 <- nrow(Final_merged_7_8)
+Richness_Tree_7_8 
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR9<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_9_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR10<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_10_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_9_10 <- merge(Sample_NR9, Sample_NR10, by = "Protein_id", all = TRUE)
+merged_9_10[is.na(merged_9_10)] <- 0
+merged_9_10$Total_reads_mapped_to_protein <- merged_9_10$Reads_mapped_to_protein.x + merged_9_10$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_9_10 <- merged_9_10 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_9_10 <- merged_9_10[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+Nsum_9_10 <- sum(Final_merged_9_10$Total_reads_mapped_to_protein)
+
+Final_merged_9_10$ratio <-(Final_merged_9_10$Total_reads_mapped_to_protein)/Nsum_9_10
+Final_merged_9_10$intermediate <- Final_merged_9_10$ratio*(log2(Final_merged_9_10$ratio))
+Shannon_index_NR_9_10 <- -sum(Final_merged_9_10$intermediate)
+Shannon_index_NR_9_10
+Richness_NR_9_10 <- nrow(Final_merged_9_10)
+Richness_NR_9_10
+
+
+summary_Subfamilies_NR_9_10 <- Final_merged_9_10 %>%
+  group_by(subfamily.x) %>%
+  summarise(total_value = sum(Total_reads_mapped_to_protein))
+Richness_subfamilies_NR_9_10 <- nrow(summary_Subfamilies_NR_9_10)
+Richness_subfamilies_NR_9_10
+summary_Subfamilies_NR_9_10$ratio <- (summary_Subfamilies_NR_9_10$total_value/Nsum_9_10)
+summary_Subfamilies_NR_9_10$intermediate <- summary_Subfamilies_NR_9_10$ratio*(log2(summary_Subfamilies_NR_9_10$ratio))
+Shannon_index_NR_9_10_subfamily <- -sum(summary_Subfamilies_NR_9_10$intermediate)
+Shannon_index_NR_9_10_subfamily
+```
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_9<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_9_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR_70_10<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_10_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_9_10 <- merge(Sample_NR_70_9, Sample_NR_70_10, by = "Protein_id", all = TRUE)
+merged_9_10[is.na(merged_9_10)] <- 0
+merged_9_10$Total_reads_mapped_to_protein <- merged_9_10$Reads_mapped_to_protein.x + merged_9_10$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_9_10 <- merged_9_10 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_9_10 <- merged_9_10[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_9_10 <- sum(Final_merged_9_10$Total_reads_mapped_to_protein)
+
+Final_merged_9_10$ratio <-(Final_merged_9_10$Total_reads_mapped_to_protein)/Nsum_9_10
+Final_merged_9_10$intermediate <- Final_merged_9_10$ratio*(log2(Final_merged_9_10$ratio))
+Shannon_index_NR_70_9_10 <- -sum(Final_merged_9_10$intermediate)
+Shannon_index_NR_70_9_10
+Richness_NR_70_9_10 <- nrow(Final_merged_9_10)
+Richness_NR_70_9_10 
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_9<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_9_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_Tree_10<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_10_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_9_10 <- merge(Sample_Tree_9, Sample_Tree_10, by = "Protein_id", all = TRUE)
+merged_9_10[is.na(merged_9_10)] <- 0
+merged_9_10$Total_reads_mapped_to_protein <- merged_9_10$Reads_mapped_to_protein.x + merged_9_10$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_9_10 <- merged_9_10 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_9_10 <- merged_9_10[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_9_10 <- sum(Final_merged_9_10$Total_reads_mapped_to_protein)
+
+Final_merged_9_10$ratio <-(Final_merged_9_10$Total_reads_mapped_to_protein)/Nsum_9_10
+Final_merged_9_10$intermediate <- Final_merged_9_10$ratio*(log2(Final_merged_9_10$ratio))
+Shannon_index_Tree_9_10 <- -sum(Final_merged_9_10$intermediate)
+Shannon_index_Tree_9_10
+Richness_Tree_9_10 <- nrow(Final_merged_9_10)
+Richness_Tree_9_10 
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR11<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_11_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR12<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_12_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_11_12 <- merge(Sample_NR11, Sample_NR12, by = "Protein_id", all = TRUE)
+merged_11_12[is.na(merged_11_12)] <- 0
+merged_11_12$Total_reads_mapped_to_protein <- merged_11_12$Reads_mapped_to_protein.x + merged_11_12$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_11_12 <- merged_11_12 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_11_12 <- merged_11_12[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+Nsum_11_12 <- sum(Final_merged_11_12$Total_reads_mapped_to_protein)
+
+Final_merged_11_12$ratio <-(Final_merged_11_12$Total_reads_mapped_to_protein)/Nsum_11_12
+Final_merged_11_12$intermediate <- Final_merged_11_12$ratio*(log2(Final_merged_11_12$ratio))
+Shannon_index_NR_11_12 <- -sum(Final_merged_11_12$intermediate)
+Shannon_index_NR_11_12
+Richness_NR_11_12 <- nrow(Final_merged_11_12)
+Richness_NR_11_12 
+
+summary_Subfamilies_NR_11_12 <- Final_merged_11_12 %>%
+  group_by(subfamily.x) %>%
+  summarise(total_value = sum(Total_reads_mapped_to_protein))
+Richness_subfamilies_NR_11_12 <- nrow(summary_Subfamilies_NR_11_12)
+Richness_subfamilies_NR_11_12
+summary_Subfamilies_NR_11_12$ratio <- (summary_Subfamilies_NR_11_12$total_value/Nsum_11_12)
+summary_Subfamilies_NR_11_12$intermediate <- summary_Subfamilies_NR_11_12$ratio*(log2(summary_Subfamilies_NR_11_12$ratio))
+Shannon_index_NR_11_12_subfamily <- -sum(summary_Subfamilies_NR_11_12$intermediate)
+Shannon_index_NR_11_12_subfamily
+```
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_11<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_11_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_NR_70_12<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_12_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_11_12 <- merge(Sample_NR_70_11, Sample_NR_70_12, by = "Protein_id", all = TRUE)
+merged_11_12[is.na(merged_11_12)] <- 0
+merged_11_12$Total_reads_mapped_to_protein <- merged_11_12$Reads_mapped_to_protein.x + merged_11_12$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_11_12 <- merged_11_12 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_11_12 <- merged_11_12[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_11_12 <- sum(Final_merged_11_12$Total_reads_mapped_to_protein)
+
+Final_merged_11_12$ratio <-(Final_merged_11_12$Total_reads_mapped_to_protein)/Nsum_11_12
+Final_merged_11_12$intermediate <- Final_merged_11_12$ratio*(log2(Final_merged_11_12$ratio))
+Shannon_index_NR_70_11_12 <- -sum(Final_merged_11_12$intermediate)
+Shannon_index_NR_70_11_12
+Richness_NR_70_11_12 <- nrow(Final_merged_11_12)
+Richness_NR_70_11_12
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_11<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_11_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Sample_Tree_12<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_12_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+merged_11_12 <- merge(Sample_Tree_11, Sample_Tree_12, by = "Protein_id", all = TRUE)
+merged_11_12[is.na(merged_11_12)] <- 0
+merged_11_12$Total_reads_mapped_to_protein <- merged_11_12$Reads_mapped_to_protein.x + merged_11_12$Reads_mapped_to_protein.y
+
+library(dplyr)
+
+merged_11_12 <- merged_11_12 %>% 
+  mutate(subfamily.x = coalesce(subfamily.x, subfamily.y))
+Final_merged_11_12 <- merged_11_12[,c('Protein_id', 'subfamily.x', 'Total_reads_mapped_to_protein')]
+
+
+Nsum_11_12 <- sum(Final_merged_11_12$Total_reads_mapped_to_protein)
+
+Final_merged_11_12$ratio <-(Final_merged_11_12$Total_reads_mapped_to_protein)/Nsum_11_12
+Final_merged_11_12$intermediate <- Final_merged_11_12$ratio*(log2(Final_merged_11_12$ratio))
+Shannon_index_Tree_11_12 <- -sum(Final_merged_11_12$intermediate)
+Shannon_index_Tree_11_12
+Richness_Tree_11_12 <- nrow(Final_merged_11_12)
+Richness_Tree_11_12
+```
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+Sample_NR13<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_13_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+Nsum_13 <- sum(Sample_NR13$Reads_mapped_to_protein)
+
+Sample_NR13$ratio <-(Sample_NR13$Reads_mapped_to_protein)/Nsum_13
+Sample_NR13$intermediate <- Sample_NR13$ratio*(log2(Sample_NR13$ratio))
+Shannon_index_NR_13 <- -sum(Sample_NR13$intermediate)
+Shannon_index_NR_13
+Richness_NR_13 <- nrow(Sample_NR13)
+Richness_NR_13 
+
+
+summary_Subfamilies_NR_13 <- Sample_NR13 %>%
+  group_by(subfamily) %>%
+  summarise(total_value = sum(Reads_mapped_to_protein))
+Richness_subfamilies_NR_13 <- nrow(summary_Subfamilies_NR_13)
+Richness_subfamilies_NR_13
+summary_Subfamilies_NR_13$ratio <- (summary_Subfamilies_NR_13$total_value/Nsum_13)
+summary_Subfamilies_NR_13$intermediate <- summary_Subfamilies_NR_13$ratio*(log2(summary_Subfamilies_NR_13$ratio))
+Shannon_index_NR_13_subfamily <- -sum(summary_Subfamilies_NR_13$intermediate)
+Shannon_index_NR_13_subfamily
+```
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_13<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_13_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Nsum_13 <- sum(Sample_NR_70_13$Reads_mapped_to_protein)
+
+Sample_NR_70_13$ratio <-(Sample_NR_70_13$Reads_mapped_to_protein)/Nsum_13
+Sample_NR_70_13$intermediate <- Sample_NR_70_13$ratio*(log2(Sample_NR_70_13$ratio))
+Shannon_index_NR_70_13 <- -sum(Sample_NR_70_13$intermediate)
+Shannon_index_NR_70_13
+Richness_NR_70_13 <- nrow(Sample_NR_70_13)
+Richness_NR_70_13
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+  Sample_Tree_13<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_13_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Nsum_13 <- sum(Sample_Tree_13$Reads_mapped_to_protein)
+
+Sample_Tree_13$ratio <-(Sample_Tree_13$Reads_mapped_to_protein)/Nsum_13
+Sample_Tree_13$intermediate <- Sample_Tree_13$ratio*(log2(Sample_Tree_13$ratio))
+Shannon_index_Tree_13 <- -sum(Sample_Tree_13$intermediate)
+Shannon_index_Tree_13
+Richness_Tree_13 <- nrow(Sample_Tree_13)
+Richness_Tree_13
+```
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR14<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/NRCPA/Z37TGN_sample_14_vs_NRCPA_DB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+
+Nsum_14 <- sum(Sample_NR14$Reads_mapped_to_protein)
+
+Sample_NR14$ratio <-(Sample_NR14$Reads_mapped_to_protein)/Nsum_14
+Sample_NR14$intermediate <- Sample_NR14$ratio*(log2(Sample_NR14$ratio))
+Shannon_index_NR_14 <- -sum(Sample_NR14$intermediate)
+Shannon_index_NR_14
+Richness_NR_14 <- nrow(Sample_NR14)
+Richness_NR_14
+
+
+summary_Subfamilies_NR_14 <- Sample_NR14 %>%
+  group_by(subfamily) %>%
+  summarise(total_value = sum(Reads_mapped_to_protein))
+Richness_subfamilies_NR_14 <- nrow(summary_Subfamilies_NR_14)
+Richness_subfamilies_NR_14
+summary_Subfamilies_NR_14$ratio <- (summary_Subfamilies_NR_14$total_value/Nsum_14)
+summary_Subfamilies_NR_14$intermediate <- summary_Subfamilies_NR_14$ratio*(log2(summary_Subfamilies_NR_14$ratio))
+Shannon_index_NR_14_subfamily <- -sum(summary_Subfamilies_NR_14$intermediate)
+Shannon_index_NR_14_subfamily
+```
+
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_NR_70_14<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/Seqid70_NR/Z37TGN_sample_14_vs_NRCPA_70seqidDB_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Nsum_14 <- sum(Sample_NR_70_14$Reads_mapped_to_protein)
+
+Sample_NR_70_14$ratio <-(Sample_NR_70_14$Reads_mapped_to_protein)/Nsum_14
+Sample_NR_70_14$intermediate <- Sample_NR_70_14$ratio*(log2(Sample_NR_70_14$ratio))
+Shannon_index_NR_70_14 <- -sum(Sample_NR_70_14$intermediate)
+Shannon_index_NR_70_14
+Richness_NR_70_14 <- nrow(Sample_NR_70_14)
+Richness_NR_70_14
+
+
+```
+
+
+```{r}
+#first we calculate the diversity of all NR CPA proteins 
+
+Sample_Tree_14<- read.delim('/home/mad149/Metagenome_grassmere/output_xblast_NRCPA/treeCPA/Z37TGN_sample_14_vs_treeCPAreps_counted_and_mapped.tsv', sep='\t', stringsAsFactors = TRUE)
+Nsum_14 <- sum(Sample_Tree_14$Reads_mapped_to_protein)
+
+Sample_Tree_14$ratio <-(Sample_Tree_14$Reads_mapped_to_protein)/Nsum_14
+Sample_Tree_14$intermediate <- Sample_Tree_14$ratio*(log2(Sample_Tree_14$ratio))
+Shannon_index_Tree_14 <- -sum(Sample_Tree_14$intermediate)
+Shannon_index_Tree_14
+Richness_Tree_14 <- nrow(Sample_Tree_14)
+Richness_Tree_14
+```
+
+
+
+
+```{r}
+Salinity <- c(32.3,  30.8, 30.2, 22.3, 17.2, 11.2, 5.8, 3.4)
+Richiness_NR <- c(Richness_NR_1_2,Richness_NR_5_6, Richness_NR_3_4,  Richness_NR_7_8, Richness_NR_9_10, Richness_NR_11_12, Richness_NR_13, Richness_NR_14)
+Richiness_NR_70 <- c(Richness_NR_70_1_2,  Richness_NR_70_5_6,Richness_NR_70_3_4, Richness_NR_70_7_8, Richness_NR_70_9_10, Richness_NR_70_11_12, Richness_NR_70_13, Richness_NR_70_14)
+Richiness_Tree <- c(Richness_Tree_1_2, Richness_Tree_5_6,Richness_Tree_3_4,  Richness_Tree_7_8, Richness_Tree_9_10, Richness_Tree_11_12, Richness_Tree_13, Richness_Tree_14)
+Richiness_subfamily_NR <- c(Richness_subfamilies_NR_1_2,Richness_subfamilies_NR_5_6, Richness_subfamilies_NR_3_4,  Richness_subfamilies_NR_7_8, Richness_subfamilies_NR_9_10, Richness_subfamilies_NR_11_12, Richness_subfamilies_NR_13, Richness_subfamilies_NR_14)
+
+
+
+Shannon_index_NR <- c(Shannon_index_NR_1_2, Shannon_index_NR_3_4, Shannon_index_NR_5_6, Shannon_index_NR_7_8, Shannon_index_NR_9_10, Shannon_index_NR_11_12, Shannon_index_NR_13, Shannon_index_NR_14)
+
+Shannon_index_NR_70 <- c(Shannon_index_NR_70_1_2, Shannon_index_NR_70_3_4, Shannon_index_NR_70_5_6, Shannon_index_NR_70_7_8, Shannon_index_NR_70_9_10, Shannon_index_NR_70_11_12, Shannon_index_NR_70_13, Shannon_index_NR_70_14)
+
+Shannon_index_Tree <- c(Shannon_index_Tree_1_2, Shannon_index_Tree_3_4, Shannon_index_Tree_5_6, Shannon_index_Tree_7_8, Shannon_index_Tree_9_10, Shannon_index_Tree_11_12, Shannon_index_Tree_13, Shannon_index_Tree_14)
+
+Shannon_index_NR_family<-c(Shannon_index_NR_1_2_subfamily, Shannon_index_NR_3_4_subfamily, Shannon_index_NR_5_6_subfamily, Shannon_index_NR_7_8_subfamily, Shannon_index_NR_9_10_subfamily, Shannon_index_NR_11_12_subfamily, Shannon_index_NR_13_subfamily, Shannon_index_NR_14_subfamily)
+
+Richness_data <- data.frame(Salinity, Richiness_NR, Richiness_NR_70, Richiness_Tree,Richiness_subfamily_NR, Shannon_index_NR, Shannon_index_NR_70, Shannon_index_Tree, Shannon_index_NR_family)
+
+
+Richness_data <- Richness_data[order(Richness_data$Salinity),]
+```
+
+
+```{r}
+
+
+plot(Richness_data$Salinity, Richness_data$Richiness_Tree, pch = 20,col = adjustcolor("green", alpha.f = 1), ylim=c(0,9000), cex=5, xlab='Salinity %(w/v)', ylab='Protein Richness', main='Protein Richness vs salinity', cex.main=5, cex.lab=3, cex.axis=3)
+lines(Richness_data$Salinity, Richness_data$Richiness_Tree, col=adjustcolor('green'), lwd=5)
+points(Richness_data$Salinity, Richness_data$Richiness_NR, pch = 20,col = adjustcolor("blue", alpha.f = 1), cex=5,cex.main=5, cex.lab=3, cex.axis=3)
+lines(Richness_data$Salinity, Richness_data$Richiness_NR, col=adjustcolor('blue'), lwd=5)
+points(Richness_data$Salinity, Richness_data$Richiness_NR_70, pch = 20,col = adjustcolor("red", alpha.f = 1), cex=5,cex.main=5, cex.lab=3, cex.axis=3)
+lines(Richness_data$Salinity, Richness_data$Richiness_NR_70, col=adjustcolor('red'), lwd=5)
+
+legend(
+  "topright",                           # Position keyword
+  legend = c("Richeness NR","Richeness NR70", "Richeness Tree"),    # Text labels
+  col = c ("blue", "red","green"),              # Line/point colors
+  pch = c(16),                     # Point styles (if plotting points)
+  lty = c(1, 1),                       # Line styles (if plotting lines)
+  title = "Legend Title",              # Optional title
+  bty = "n"                            # "o" for a box boundary, "n" for no box
+)
+
+```
+
+
+```{r}
+plot(Richness_data$Salinity, Richness_data$Shannon_index_Tree, pch = 20,col = adjustcolor("forestgreen", alpha.f = 1), ylim=c(0,12), cex=5, xlab='Salinity %(w/v)', ylab='Protein diviersty', main='alpha-diversity (Shannon) vs Salinity', cex.main=5, cex.lab=3, cex.axis=3)
+lines(Richness_data$Salinity, Richness_data$Shannon_index_Tree, col=adjustcolor('forestgreen'), lwd=5)
+
+points(Richness_data$Salinity, Richness_data$Shannon_index_NR, pch = 20,col = adjustcolor("skyblue", alpha.f = 1), cex.main=5, cex.lab=3, cex.axis=3, cex=5)
+lines(Richness_data$Salinity, Richness_data$Shannon_index_NR, col=adjustcolor('skyblue'), lwd=5)
+points(Richness_data$Salinity, Richness_data$Shannon_index_NR_70, pch = 20,col = adjustcolor("brown1", alpha.f = 1), cex.main=5, cex.lab=3, cex.axis=3, cex=5)
+lines(Richness_data$Salinity, Richness_data$Shannon_index_NR_70, col=adjustcolor('brown1'), lwd=5)
+legend(
+  "topright",                           # Position keyword
+  legend = c("Shannon_index NR","Shannon_indexs NR70", "Shannon_index Tree"),    # Text labels
+  col = c ("skyblue", "brown1","forestgreen"),              # Line/point colors
+  pch = c(16),                     # Point styles (if plotting points)
+  lty = c(1, 1),                       # Line styles (if plotting lines)
+  title = "Legend Title",              # Optional title
+  bty = "n"                            # "o" for a box boundary, "n" for no box
+)
+```
+
+
+```{r}
+plot(Richness_data$Salinity, Richness_data$Richiness_subfamily_NR, pch = 20,col = adjustcolor("gold3", alpha.f = 1), ylim=c(0,50),cex=5, xlab='Salinity %(w/v)', ylab='Subfamily richness', main='Subfamily richness vs Salinity', cex.main=5, cex.lab=3, cex.axis=3)
+lines(Richness_data$Salinity, Richness_data$Richiness_subfamily_NR, pch = 20,col = adjustcolor("gold3", alpha.f = 1), lwd=5)
+
+```
+```{r}
+plot(Richness_data$Salinity, Richness_data$Shannon_index_NR_family, pch = 20,col = adjustcolor("deeppink", alpha.f = 1), ylim=c(0,4),cex=5, xlab='Salinity %(w/v)', ylab='Subfamily diversity', main='Subfamily diversty vs Salinity', cex.main=5, cex.lab=3, cex.axis=3)
+lines(Richness_data$Salinity, Richness_data$Shannon_index_NR_family, pch = 20,col = adjustcolor("deeppink", alpha.f = 1), lwd=5)
+```
+
+
+
+```{r}
+Salinity <- c(32.3, 32.3, 30.8, 30.8, 30.2, 30.2, 22.3, 22.3, 17.2, 17.2, 11.2, 11.2,5.8, 3.4)
+Shannon_index <-c(2.16, 2.19, 2.33, 2.38, 2.48, 2.51, 1.79, 1.76, 1.23, 1.19, 1.32, 1.3, 3.61, 4.45)
+Richness<-c(41,43,47,46,45,43,35,37,34,33,44,46,65,353)
+
+Species_Richness <- data.frame(Salinity, Shannon_index, Richness)
+
+
+Salinity <- c(3.4, 5.8, 11.2, 17.2, 22.3, 30.2, 30.8, 32.3)
+Ratio <- c(2.291, 3.26,6.213, 5.5, 3.63,3.0376,3.46,3.489)
+Ratio_df <- data.frame(Salinity, Ratio)
+
+Richness<-c(41,43,47,46,45,43,35,37,34,33,44,46,65,353)
+
+plot(Richness_data$Salinity, Richness_data$Shannon_index_Tree, pch = 20,col = adjustcolor("green", alpha.f = 1), ylim=c(0,12))
+points(Richness_data$Salinity, Richness_data$Shannon_index_NR, pch = 20,col = adjustcolor("gold2", alpha.f = 1))
+lines(Richness_data$Salinity, Richness_data$Shannon_index_NR, col=adjustcolor('gold2'))
+points(Richness_data$Salinity, Richness_data$Shannon_index_NR_70, pch = 20,col = adjustcolor("red", alpha.f = 1))
+lines(Richness_data$Salinity, Richness_data$Shannon_index_NR_70, col=adjustcolor('red'))
+lines(Richness_data$Salinity, Richness_data$Shannon_index_Tree, col=adjustcolor('green'))
+plot(Species_Richness$Salinity,Species_Richness$Shannon_index, pch = 20,col = adjustcolor("orange", alpha.f = 1), ylim=c(0,5))
+lines(Species_Richness$Salinity, Species_Richness$Shannon_index, pch = 20,col = adjustcolor("orange", alpha.f = 1))
+
+points(Ratio_df$Salinity,Ratio_df$Ratio, pch = 20,col = adjustcolor("black", alpha.f = 1), ylim=c(0,5))
+lines(Ratio_df$Salinity, Ratio_df$Ratio, pch = 20,col = adjustcolor("black", alpha.f = 1))
+
+#points(Richness_data$Salinity, Richness_data$Shannon_index_NR_family, pch = 20,col = adjustcolor("blue", alpha.f = 1), ylim=c(0,4))
+#lines(Richness_data$Salinity, Richness_data$Shannon_index_NR_family, pch = 20,col = adjustcolor("blue", alpha.f = 1))
+
+legend(
+  "topright",                           # Position keyword
+  legend = c("Shannon_index_subfamilies NR","Shannon_index_species","Shannon_index NR","Shannon_indexs NR70", "Shannon_index Tree"),    # Text labels
+  col = c ("blue", "orange","gold2", "red","green"),              # Line/point colors
+  pch = c(16),                     # Point styles (if plotting points)
+  lty = c(1, 1),                       # Line styles (if plotting lines)
+  title = "Legend Title",              # Optional title
+  bty = "n"                            # "o" for a box boundary, "n" for no box
+)
+
+```
+
+```{r}
+
+
+plot(Species_Richness$Salinity, Species_Richness$Shannon_index)
+
+plot(Species_Richness$Salinity,Species_Richness$Shannon_index, pch = 20,col = adjustcolor("orange", alpha.f = 1), ylim=c(0,5),  cex=5, xlab ="Salinity % (W/v)", ylab="species Alpha-diversity (Shannon)", main='Species diversity vs Salinity', cex.main=5, cex.lab =3,cex.axis=3)
+lines(Species_Richness$Salinity, Species_Richness$Shannon_index, pch = 20,col = adjustcolor("orange", alpha.f = 1), lwd=5)
+
+plot(Species_Richness$Salinity,Species_Richness$Richness, pch = 20,col = adjustcolor("purple", alpha.f = 1), ylim=c(0,400),  cex=5, xlab ="Salinity % (W/v)", ylab="Species diversity",  main='Species richness vs Salinity', cex.main=5, cex.lab =3,cex.axis=3)
+lines(Species_Richness$Salinity, Species_Richness$Richness, pch = 20,col = adjustcolor("purple", alpha.f = 1), lwd=5)
+```
+

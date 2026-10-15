@@ -1,0 +1,449 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+```{r}
+LGM_data<- read.delim('/home/mad149/Metagenome_grassmere/xblast_output_30Sept_LGM_Incl_extrafocus_Kef.tsv', sep='\t', stringsAsFactors = TRUE)
+```
+
+
+```{r}
+Salinity <- c(32.3, 32.3, 30.8, 30.8, 30.2, 30.2, 22.3, 22.3, 17.2, 17.2, 11.2, 11.2,5.8, 3.4)
+LGM_data <- LGM_data %>% arrange(SRA_id)
+LGM_data$Salinity <-c(32.3, 17.2, 11.2, 11.2, 5.8, 3.4, 0, 0,32.3, 30.8, 30.8, 30.2, 30.2, 22.3, 22.3, 17.2)
+LGM_data$Read_count <-c(36423842,36423842, 36423842,36423842, 36423842, 36423842, 68180,2136520, 36423842, 36423842, 36423842, 36334532, 36423842, 36423842, 36423842, 36423842)
+
+```
+
+
+```{r}
+
+LGM_data$CPM_Ribosomal_count <- ((LGM_data$RpS2_count + LGM_data$RpL4_count)/LGM_data$Read_count)*1000000
+
+
+LGM_data$MIP_count <- ((LGM_data$MIP_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$ClcA_count <- ((LGM_data$ClcA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$MscS_count <- ((LGM_data$MscS_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$MscL_count <- ((LGM_data$MscL_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$OpuAC_count <- ((LGM_data$OpuAC_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Na_ala_count <- ((LGM_data$Na_ala_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$CorA_count <- ((LGM_data$CorA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Na_Ca_count <- ((LGM_data$Na_Ca_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$BCCT_count <- ((LGM_data$BCCT_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$MgtE_count <- ((LGM_data$MgtE_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$EctC_count <- ((LGM_data$EctC_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$MnhE_count <- ((LGM_data$MnhE_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Trehalose_PPase_count <- ((LGM_data$Trehalose_PPase_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$TrkH_count <- ((LGM_data$TrkH_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kup_count <- ((LGM_data$Kup_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Hppase_count <- ((LGM_data$Hppase_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NhaB_count <- ((LGM_data$NhaB_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NhaC_count <- ((LGM_data$NhaC_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NhaD_count <- ((LGM_data$NhaD_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kdp_count <- ((LGM_data$Kdp_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$MtrA_count <- ((LGM_data$MtrA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$AApermease_count <- ((LGM_data$AApermease_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$BranchedchainAA_transp_count <- ((LGM_data$BranchedchainAA_transp_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$TreT_count <- ((LGM_data$TreT_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NqrA_count <- ((LGM_data$NqrA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$KimA_count <- ((LGM_data$KimA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Betain_ald_dehyd_count <- ((LGM_data$Betain_ald_dehyd_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+
+LGM_data$total_CPA_count <- ((LGM_data$total_CPA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NHX_count <- ((LGM_data$NHX_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$CPA1_SL_count <- ((LGM_data$CPA1_SL_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$CHX_count <- ((LGM_data$CHX_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+LGM_data$Kef_count <- ((LGM_data$Kef_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+
+LGM_data$NhaP_CPA1_count <- ((LGM_data$NhaP_CPA1_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$GerN_count <- ((LGM_data$GerN_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$SOD2_count <- ((LGM_data$SOD2_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NhaS5_count <- ((LGM_data$NhaS5_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$NhaP_CPA1_count <- ((LGM_data$NhaP_CPA1_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+LGM_data$NhaA_count <- ((LGM_data$NhaA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Uncharacterized_CPA_count <- ((LGM_data$Uncharacterized_CPA_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Undescribed_CPA1_count <- ((LGM_data$Undescribed_CPA1_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$UndProkarya_CPA1_IDR_count <-((LGM_data$UndProkarya_CPA1_IDR_count/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+LGM_data$Kef_subclade29950<- ((LGM_data$Kef_subclade29950/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade42457<- ((LGM_data$Kef_subclade42457/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44199<-  ((LGM_data$Kef_subclade44199/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade42947<-  ((LGM_data$Kef_subclade42947/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade42415<-  ((LGM_data$Kef_subclade42415/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44013<-  ((LGM_data$Kef_subclade44013/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44600<-  ((LGM_data$Kef_subclade44600/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43808<-  ((LGM_data$Kef_subclade43808/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44514<-  ((LGM_data$Kef_subclade44514/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43312<-  ((LGM_data$Kef_subclade43312/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43225<-  ((LGM_data$Kef_subclade43225/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43377<-  ((LGM_data$Kef_subclade43377/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43531<-  ((LGM_data$Kef_subclade43531/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43598<-  ((LGM_data$Kef_subclade43598/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43720<-  ((LGM_data$Kef_subclade43720/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44121<-  ((LGM_data$Kef_subclade44121/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43954<-  ((LGM_data$Kef_subclade43954/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade43914<-  ((LGM_data$Kef_subclade43914/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade42396<-  ((LGM_data$Kef_subclade42396/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44582<-  ((LGM_data$Kef_subclade44582/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_subclade44712<-  ((LGM_data$Kef_subclade44712/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+LGM_data$Kef_group38142<-  ((LGM_data$Kef_group38142/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+
+LGM_data$Missing_kef<-  ((LGM_data$Missing_kef/LGM_data$Read_count)*1000000)/LGM_data$CPM_Ribosomal_count
+
+LGM_data$total_CPA_noKef_count <- LGM_data$total_CPA_count - LGM_data$Kef_count
+
+LGM_data$total_NaExp <- LGM_data$total_CPA_count + LGM_data$MnhE_count + LGM_data$Hppase_count + LGM_data$MtrA_count + LGM_data$NhaB_count + LGM_data$NhaC_count + LGM_data$NhaD_count + LGM_data$NqrA_count- LGM_data$Kef_count
+
+
+LGM_data$total_KImp <- LGM_data$TrkH_count + LGM_data$Kdp_count + LGM_data$KimA_count + LGM_data$Kup_count
+LGM_data$total_OsImp <- LGM_data$MIP_count + LGM_data$BCCT_count + LGM_data$OpuAC_count
+LGM_data$total_MgImp <- LGM_data$MgtE_count + LGM_data$CorA_count 
+LGM_data$total_Synth <- LGM_data$EctC_count + LGM_data$TreT_count + LGM_data$Trehalose_PPase_count 
+
+
+```
+
+
+
+
+
+```{r}
+Read_count<- read.delim('/home/mad149/Read_count_file_Sept10 - Read_count_file(1).tsv', sep='\t', stringsAsFactors = TRUE)
+Read_count <- Read_count[,c(1,4)]
+```
+
+
+```{r}
+
+Water_data<- read.delim('/home/mad149/chapter_meta_analysis/metadata/Studies_salinity_metadata_All - Studies_salinity_metadata_water.csv.tsv', sep='\t', stringsAsFactors = TRUE)
+
+Water_data$Salinity<- as.numeric(gsub( ',','.', Water_data$Salinity))
+Water_data$pH<- as.numeric(gsub( ',','.',Water_data$pH))
+
+
+
+xblast_output <- read.delim('/home/mad149/chapter_meta_analysis/xblast_output_Sept10.tsv', sep='\t', stringsAsFactors = TRUE)
+
+
+merged_df_Aqua <- merge(Water_data, Read_count, by = "SRA_id")
+merged_df_Aqua <- merge(merged_df_Aqua, xblast_output, by = "SRA_id")
+
+
+merged_df_Aqua$Environment <- 'Aqueous'
+merged_df_Aqua$Description[merged_df_Aqua$SRA_id == 'ERR864073' ] <- "Estuary"
+
+#install.packages("readr")
+library(readr)
+
+# Write your data frame to a TSV file
+write.table(merged_df_Aqua, file = "Studies_salinity_metadata_All_aquatic_Sept10.tsv", sep = "\t", row.names = FALSE, quote = FALSE)
+```
+
+
+
+```{r}
+merged_df_Aqua$CPM_Ribosomal_count <- ((merged_df_Aqua$RpS2_count + merged_df_Aqua$RpL4_count)/merged_df_Aqua$Read_count)*1000000
+```
+
+
+```{r Normalize_water}
+
+merged_df_Aqua$MIP_count <- ((merged_df_Aqua$MIP_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$ClcA_count <- ((merged_df_Aqua$ClcA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$MscS_count <- ((merged_df_Aqua$MscS_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$MscL_count <- ((merged_df_Aqua$MscL_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$OpuAC_count <- ((merged_df_Aqua$OpuAC_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Na_ala_count <- ((merged_df_Aqua$Na_ala_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$CorA_count <- ((merged_df_Aqua$CorA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Na_Ca_count <- ((merged_df_Aqua$Na_Ca_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$BCCT_count <- ((merged_df_Aqua$BCCT_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$MgtE_count <- ((merged_df_Aqua$MgtE_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$EctC_count <- ((merged_df_Aqua$EctC_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$MnhE_count <- ((merged_df_Aqua$MnhE_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Trehalose_PPase_count <- ((merged_df_Aqua$Trehalose_PPase_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$TrkH_count <- ((merged_df_Aqua$TrkH_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kup_count <- ((merged_df_Aqua$Kup_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Hppase_count <- ((merged_df_Aqua$Hppase_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NhaB_count <- ((merged_df_Aqua$NhaB_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NhaC_count <- ((merged_df_Aqua$NhaC_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NhaD_count <- ((merged_df_Aqua$NhaD_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kdp_count <- ((merged_df_Aqua$Kdp_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$MtrA_count <- ((merged_df_Aqua$MtrA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$AApermease_count <- ((merged_df_Aqua$AApermease_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$BranchedchainAA_transp_count <- ((merged_df_Aqua$BranchedchainAA_transp_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$TreT_count <- ((merged_df_Aqua$TreT_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NqrA_count <- ((merged_df_Aqua$NqrA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$KimA_count <- ((merged_df_Aqua$KimA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Betain_ald_dehyd_count <- ((merged_df_Aqua$Betain_ald_dehyd_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+
+merged_df_Aqua$total_CPA_count <- ((merged_df_Aqua$total_CPA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NHX_count <- ((merged_df_Aqua$NHX_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$CPA1_SL_count <- ((merged_df_Aqua$CPA1_SL_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$CHX_count <- ((merged_df_Aqua$CHX_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+merged_df_Aqua$Kef_count <- ((merged_df_Aqua$Kef_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+
+merged_df_Aqua$NhaP_CPA1_count <- ((merged_df_Aqua$NhaP_CPA1_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$GerN_count <- ((merged_df_Aqua$GerN_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$SOD2_count <- ((merged_df_Aqua$SOD2_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NhaS5_count <- ((merged_df_Aqua$NhaS5_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$NhaP_CPA1_count <- ((merged_df_Aqua$NhaP_CPA1_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+merged_df_Aqua$NhaA_count <- ((merged_df_Aqua$NhaA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Uncharacterized_CPA_count <- ((merged_df_Aqua$Uncharacterized_CPA_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Undescribed_CPA1_count <- ((merged_df_Aqua$Undescribed_CPA1_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$UndProkarya_CPA1_IDR_count <-((merged_df_Aqua$UndProkarya_CPA1_IDR_count/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+merged_df_Aqua$Kef_subclade29950<- ((merged_df_Aqua$Kef_subclade29950/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade42457<- ((merged_df_Aqua$Kef_subclade42457/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44199<-  ((merged_df_Aqua$Kef_subclade44199/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade42947<-  ((merged_df_Aqua$Kef_subclade42947/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade42415<-  ((merged_df_Aqua$Kef_subclade42415/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44013<-  ((merged_df_Aqua$Kef_subclade44013/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44600<-  ((merged_df_Aqua$Kef_subclade44600/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43808<-  ((merged_df_Aqua$Kef_subclade43808/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44514<-  ((merged_df_Aqua$Kef_subclade44514/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43312<-  ((merged_df_Aqua$Kef_subclade43312/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43225<-  ((merged_df_Aqua$Kef_subclade43225/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43377<-  ((merged_df_Aqua$Kef_subclade43377/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43531<-  ((merged_df_Aqua$Kef_subclade43531/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43598<-  ((merged_df_Aqua$Kef_subclade43598/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43720<-  ((merged_df_Aqua$Kef_subclade43720/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44121<-  ((merged_df_Aqua$Kef_subclade44121/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43954<-  ((merged_df_Aqua$Kef_subclade43954/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade43914<-  ((merged_df_Aqua$Kef_subclade43914/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade42396<-  ((merged_df_Aqua$Kef_subclade42396/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44582<-  ((merged_df_Aqua$Kef_subclade44582/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_subclade44712<-  ((merged_df_Aqua$Kef_subclade44712/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+merged_df_Aqua$Kef_group38142<-  ((merged_df_Aqua$Kef_group38142/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+
+merged_df_Aqua$Missing_kef<-  ((merged_df_Aqua$Missing_kef/merged_df_Aqua$Read_count)*1000000)/merged_df_Aqua$CPM_Ribosomal_count
+
+merged_df_Aqua$total_CPA_noKef_count <- merged_df_Aqua$total_CPA_count - merged_df_Aqua$Kef_count
+
+merged_df_Aqua$total_NaExp <- merged_df_Aqua$total_CPA_count + merged_df_Aqua$MnhE_count + merged_df_Aqua$Hppase_count + merged_df_Aqua$MtrA_count + merged_df_Aqua$NhaB_count + merged_df_Aqua$NhaC_count + merged_df_Aqua$NhaD_count + merged_df_Aqua$NqrA_count- merged_df_Aqua$Kef_count
+
+
+merged_df_Aqua$total_KImp <- merged_df_Aqua$TrkH_count + merged_df_Aqua$Kdp_count + merged_df_Aqua$KimA_count + merged_df_Aqua$Kup_count
+merged_df_Aqua$total_OsImp <- merged_df_Aqua$MIP_count + merged_df_Aqua$BCCT_count + merged_df_Aqua$OpuAC_count
+merged_df_Aqua$total_MgImp <- merged_df_Aqua$MgtE_count + merged_df_Aqua$CorA_count 
+merged_df_Aqua$total_Synth <- merged_df_Aqua$EctC_count + merged_df_Aqua$TreT_count + merged_df_Aqua$Trehalose_PPase_count 
+
+
+cleanAqua <- merged_df_Aqua[!is.na(merged_df_Aqua$Salinity),]
+``` 
+
+
+
+```{r}
+
+ggplot(data=cleanAqua, aes(x=Salinity, y=DEIK_ratio)) + geom_point()
+
+cleanAqua$Salt_block[cleanAqua$Salinity > 26 ] <- "ES"
+cleanAqua$Salt_block[cleanAqua$Salinity == 26] <- "ES"
+
+
+cleanAqua$Salt_block[cleanAqua$Salinity < 2.4] <- "NBS"
+cleanAqua$Salt_block[cleanAqua$Salinity == 2.4 ] <- "NBS"
+
+cleanAqua$Salt_block[cleanAqua$Salinity > 2.4 & cleanAqua$Salinity <14] <- "S"
+cleanAqua$Salt_block[cleanAqua$Salinity == 14] <- "S"
+
+cleanAqua$Salt_block[cleanAqua$Salinity > 14 & cleanAqua$Salinity <26] <- "HS"
+splinefitTDEIKAqua <- smooth.spline(cleanAqua$Salinity, cleanAqua$DEIK_ratio)
+
+plot(cleanAqua$Salinity, cleanAqua$DEIK_ratio, pch = 20, col = cleanAqua$Salinity,cex = 4,      cex.axis=2,  main = "DEIK-ratio",      xlab = "Salinity %(w/v)",     ylab = "DEIK ratio",cex.main = 4, cex.lab = 4) + lines(splinefitTDEIKAqua, col = "black", lwd = 10)#+abline(v = c(2.4, 14, 26), col = "black", lwd=4) 
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15'| LGM_data$SRA_id != 'Z37TGN_16',]$Salinity ,LGM_data[LGM_data$SRA_id != 'Z37TGN_15'| LGM_data$SRA_id != 'Z37TGN_16',]$DEIK_ratio, pch = 20,col = adjustcolor("orange"), cex=4)
+
+
+cleanAqua$Salt_block
+ggplot(cleanAqua, aes(Salinity,DEIK_ratio, col=Salt_block)) + 
+    geom_point(size = 6, alpha=0.5) +geom_smooth(method = 'lm', se = T,linewidth=2) +
+  theme(text = element_text(size = 20)) + theme(
+    axis.text = element_text(size = 20)) + geom_point(data=LGM_data[LGM_data$SRA_id != 'Z37TGN_15'& LGM_data$SRA_id != 'Z37TGN_16',],  aes(x = Salinity, y = DEIK_ratio), color = "orange", size = 6)
+
+ggplot(cleanAqua, aes(Salinity,DEIK_ratio, col=Salinity)) + 
+    geom_point(size = 6, alpha=0.7) +geom_smooth(method = 'l', se = T,linewidth=2) +
+  theme(text = element_text(size = 20)) + theme(
+    axis.text = element_text(size = 20)) + scale_color_gradient(low = "lightblue", high = "red2", limits = c(0, 42))
+
+
+cleanAqua$Salt_block
+ggplot(cleanAqua, aes(Salinity,DEIK_ratio, col=Salt_block)) + 
+    geom_point(size = 6, alpha=0.5) +geom_smooth(method = 'lm', se = F,linewidth=2) +
+  theme(text = element_text(size = 20)) + theme(
+    axis.text = element_text(size = 20))
+
+ggplot(cleanAqua, aes(Salinity,DEIK_ratio, col=Salinity)) + 
+    geom_point(size = 6, alpha=0.7) +geom_smooth(method = 'l', se = F,linewidth=2) +
+  theme(text = element_text(size = 20)) + theme(
+    axis.text = element_text(size = 20)) + geom_point(data=LGM_data[LGM_data$SRA_id != 'Z37TGN_15',],  aes(x = Salinity, y = DEIK_ratio), color = "purple", size = 6)+ scale_color_gradient(low = "lightblue", high = "red2", limits = c(0, 42))
+```
+
+
+```{r}
+LGM_data<-LGM_data[order(LGM_data$Salinity),]
+cleanAqua<-cleanAqua[order(cleanAqua$Salinity),]
+
+LGM_data <- LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]
+LGM_data <- LGM_data[LGM_data$SRA_id != 'Z37TGN_16',]
+
+spline_KefLGM<- smooth.spline( LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity,LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Kef_count)
+spline_fitKefAq<- smooth.spline(cleanAqua$Salinity, cleanAqua$Kef_count)
+
+plot(cleanAqua$Salinity,cleanAqua$Kef_count, pch = 20,col = adjustcolor("yellow2", alpha.f = 0.5), ylim=c(0,3), cex=4) +lines(spline_fitKefAq, col='gold',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Kef_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_KefLGM, col='black', lwd=4)
+
+
+
+spline_TrkHLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$TrkH_count)
+spline_TrkHAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$TrkH_count)
+
+
+plot(cleanAqua$Salinity,cleanAqua$TrkH_count, pch = 20,col = adjustcolor("cyan4", alpha.f = 0.5), ylim=c(0,3), cex=4) +lines(spline_TrkHAq, col='lightblue3',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$TrkH_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_TrkHLGM, col='black', lwd=4)
+
+spline_MscLLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$MscL_count)
+spline_MscLAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$MscL_count)
+
+
+
+plot(cleanAqua$Salinity,cleanAqua$MscL_count, pch = 20,col = adjustcolor("pink4", alpha.f = 0.5), ylim=c(0,0.5), cex=4) +lines(spline_MscLAq, col='pink',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$MscL_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_MscLLGM, col='black', lwd=4)
+
+spline_MscSLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$MscS_count)
+spline_MscSAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$MscS_count)
+
+
+plot(cleanAqua$Salinity,cleanAqua$MscS_count, pch = 20,col = adjustcolor("brown3", alpha.f = 0.5), ylim=c(0,2), cex=4) +lines(spline_MscSAq, col='cornsilk3',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$MscS_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_MscSLGM, col='black', lwd=4)
+
+
+spline_OpuACLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$OpuAC_count)
+spline_OpuACAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$OpuAC_count)
+
+
+plot(cleanAqua$Salinity,cleanAqua$OpuAC_count, pch = 20,col = adjustcolor("red", alpha.f = 0.5), ylim=c(0,2), cex=4) +lines(spline_OpuACAq, col='brown',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$OpuAC_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_OpuACLGM, col='black', lwd=4)
+
+
+spline_BCCTLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$BCCT_count)
+spline_BCCTAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$BCCT_count)
+
+
+plot(cleanAqua$Salinity,cleanAqua$BCCT_count, pch = 20,col = adjustcolor("salmon", alpha.f = 0.5), ylim=c(0,4), cex=4) +lines(spline_BCCTAq, col='darksalmon',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$BCCT_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_BCCTLGM, col='black', lwd=4)
+
+
+spline_NhaDLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$NhaD_count)
+spline_NhaDAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$NhaD_count)
+
+plot(cleanAqua$Salinity,cleanAqua$NhaD_count, pch = 20,col = adjustcolor("green", alpha.f = 0.5), ylim=c(0,3), cex=4) +lines(spline_NhaDAq, col='forestgreen',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$NhaD_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_NhaDLGM, col='black', lwd=4)
+
+
+spline_NhaCLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$NhaC_count)
+spline_NhaCAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$NhaC_count)
+
+plot(cleanAqua$Salinity,cleanAqua$NhaC_count, pch = 20,col = adjustcolor("darkmagenta", alpha.f = 0.5), ylim=c(0,3), cex=4) +lines(spline_NhaCAq, col='blueviolet',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$NhaC_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_NhaCLGM, col='black', lwd=4)
+
+
+spline_CorALGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$CorA_count)
+spline_CorAAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$CorA_count)
+
+plot(cleanAqua$Salinity,cleanAqua$CorA_count, pch = 20,col = adjustcolor("darkseagreen", alpha.f = 0.5), ylim=c(0,1.25), cex=4) +lines(spline_CorAAq, col='darkolivegreen',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$CorA_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_CorALGM, col='black', lwd=4)
+
+spline_MgtELGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$MgtE_count)
+spline_MgtEAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$MgtE_count)
+
+plot(cleanAqua$Salinity,cleanAqua$MgtE_count, pch = 20,col = adjustcolor("darkorange", alpha.f = 0.5), ylim=c(0,1.25), cex=4) +lines(spline_MgtEAq, col='goldenrod',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$MgtE_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_MgtELGM, col='black', lwd=4)
+
+
+spline_NqrALGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$NqrA_count)
+spline_NqrAAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$NqrA_count)
+
+plot(cleanAqua$Salinity,cleanAqua$NqrA_count, pch = 20,col = adjustcolor("darksalmon", alpha.f = 0.5), ylim=c(0,0.9), cex=4) +lines(spline_NqrAAq, col='salmon2',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$NqrA_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_NqrALGM, col='black', lwd=4)
+
+spline_HppaseLGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Hppase_count)
+spline_HppaseAq<- smooth.spline(cleanAqua$Salinity,cleanAqua$Hppase_count)
+
+plot(cleanAqua$Salinity,cleanAqua$Hppase_count, pch = 20,col = adjustcolor("antiquewhite3", alpha.f = 0.5), ylim=c(0,2), cex=4) +lines(spline_HppaseAq, col='antiquewhite4',lwd=4)
+points(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Hppase_count, col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_HppaseLGM, col='black', lwd=4)
+
+
+
+spline_UndProkarya_CPA_IDR_LGM<- smooth.spline(LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$Salinity, LGM_data[LGM_data$SRA_id != 'Z37TGN_15',]$UndProkarya_CPA1_IDR_count)
+spline_UndProkarya_CPA_IDR_Aq<- smooth.spline(cleanAqua$Salinity, cleanAqua$UndProkarya_CPA1_IDR_count)
+
+plot(cleanAqua$Salinity, cleanAqua$UndProkarya_CPA1_IDR_count, pch = 20,col = adjustcolor("cornflowerblue", alpha.f = 0.5), ylim=c(0,3), cex=4) +lines(spline_UndProkarya_CPA_IDR_Aq, col='cadetblue1',lwd=4)
+points(LGM_data$Salinity, LGM_data$UndProkarya_CPA1_IDR_count,col=adjustcolor('gray', alpha.f=1),  pch=20,cex=4)
+lines(spline_UndProkarya_CPA_IDR_LGM, col='black', lwd=4)
+
+
+```
+
+
+```{r}
+splinefitTDEIKAqua <- smooth.spline(LGM_data$Salinity, LGM_data$DEIK_ratio)
+
+spline_fitKefAq<- smooth.spline(LGM_data$Salinity, LGM_data$Kef_count)
+spline_fitIDRAq<- smooth.spline(LGM_data$Salinity, LGM_data$UndProkarya_CPA1_IDR_count)
+splinefitNHX <- smooth.spline(LGM_data$Salinity,LGM_data$NHX_count)
+splinefitNhaS5 <- smooth.spline(LGM_data$Salinity,LGM_data$NhaS5_count)
+splinefitGerN<- smooth.spline(LGM_data$Salinity,LGM_data$GerN_count)
+splinefitCHX <- smooth.spline(LGM_data$Salinity,LGM_data$CHX_count)
+splinefitCPA1_Sl <- smooth.spline(LGM_data$Salinity, LGM_data$CPA1_SL_count)
+splinefitNhaA <- smooth.spline(LGM_data$Salinity, LGM_data$NhaA_count)
+splinefitNhaP <- smooth.spline(LGM_data$Salinity, LGM_data$NhaP_CPA1_count)
+splinefitSOD2 <- smooth.spline(LGM_data$Salinity, LGM_data$SOD2_count)
+splinefitUndCPA1<- smooth.spline(LGM_data$Salinity, LGM_data$Undescribed_CPA1_count)
+splinefitUncCPA<- smooth.spline(LGM_data$Salinity, LGM_data$Uncharacterized_CPA_count)
+
+
+spline_fit_nonKef_CPA_Aq <- smooth.spline(LGM_data$Salinity, LGM_data$total_CPA_noKef_count)
+splinefitTotalCPAAq <- smooth.spline(LGM_data$Salinity, LGM_data$total_CPA_count)
+
+spline_fit_Kef29950<-smooth.spline(LGM_data$Salinity,LGM_data$Kef_subclade29950)
+spline_fit_Kef44514<-smooth.spline(LGM_data$Salinity,LGM_data$Kef_subclade44514)
+
+plot(LGM_data$Salinity, LGM_data$UndProkarya_CPA1_IDR_count, pch = 20,
+     col = adjustcolor("cadetblue", alpha.f = 0.5), cex=2, ylim=c(0,1.2),
+     cex.axis = 2,
+     main = "CPA subfamilies",
+     xlab = "%(w/v) Salinity",
+      ylab = "CPMR",cex.main = 4, cex.lab = 3)  + lines(spline_fitKefAq, col = "deeppink", lwd = 4)+ abline(v = c(14,26), col = "black", lty = "solid") + lines(spline_fitIDRAq, col='cornflowerblue', lwd=4)+ lines(splinefitCHX, col ="red", lwd = 4) + lines(splinefitNHX, col='cyan3', lwd=4)+lines(splinefitNhaA, col='orange3', lwd=4) + lines(splinefitCPA1_Sl, col='green3', lwd=4)+ lines(splinefitNhaP, col='purple4', lwd=4)+ lines(splinefitNhaS5, col='seagreen', lwd=4) + lines(splinefitGerN, col='grey45', lwd=4)+ lines(splinefitSOD2, col='brown', lwd=4)+ lines(splinefitUndCPA1, col='gold2', lwd=4) + lines(splinefitUncCPA, col='black', lwd=4)
+points(LGM_data$Salinity, LGM_data$Kef_count, col=adjustcolor('pink',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$Kef_count, col=adjustcolor('pink',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$CHX_count, col=adjustcolor('brown1',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$Undescribed_CPA1_count, col=adjustcolor('yellow2',alpha.f=0.5), cex=2, pch=20) +points(LGM_data$Salinity, LGM_data$Uncharacterized_CPA_count, col=adjustcolor('gray1',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$NhaA_count, col=adjustcolor('orange',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$NhaS5_count, col=adjustcolor('aquamarine4',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$SOD2_count, col=adjustcolor('chocolate',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$NHX_count, col=adjustcolor('cyan',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$CPA1_SL_count, col=adjustcolor('green',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$NhaP_count, col=adjustcolor('purple',alpha.f=0.5), cex=2, pch=20)+points(LGM_data$Salinity, LGM_data$GerN_count, col=adjustcolor('grey',alpha.f=0.5), cex=2, pch=20)
+#+ lines(splinefitTotalCPAAq, col ="orange3", lwd = 4)
+
+
+#points(LGM_data$Salinity, LGM_data$UndProkarya_CPA1_IDR_count,col=adjustcolor('cadetblue1', alpha.f=0.5),  pch=20,cex=2) +
+```
+

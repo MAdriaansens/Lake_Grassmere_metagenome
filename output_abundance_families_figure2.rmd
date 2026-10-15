@@ -1,0 +1,170 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-08-09"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+Dataset1 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_1_sample_1.tsv', sep='\t')
+Dataset1_Family<- (Dataset1[Dataset1$rank == 'family',])
+##pie(Dataset1[Dataset1$rank == 'family',]$relative_abundance_percent, labels=c('Haloferacaceae', 'Haloarculaceae', 'Salinibacteraceae', 'Nanosalinaceae', 'Nitrococaceae', 'Halorutilaceae'), border='white', col=c('cyan', 'blue', 'brown1', 'grey2', 'skyblue', 'skyblue3'))
+```
+
+```{r}
+Dataset2 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_2_sample_2.tsv', sep='\t')
+Dataset2_Family<- (Dataset2[Dataset2$rank == 'family',])
+
+#pie(Dataset2[Dataset2$rank == 'family',]$relative_abundance_percent, labels=c('Haloferacaceae', 'Haloarculaceae', 'Salinibacteraceae', 'Nanosalinaceae', 'Nitrococaceae', 'Halorutilaceae'), border='white', col=c('cyan', 'blue', 'brown1', 'grey2', 'skyblue', 'skyblue3'))
+```
+
+
+```{r}
+Dataset3 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_3_sample_3.tsv', sep='\t')
+print(Dataset3[Dataset3$rank == 'family',])
+Dataset3_Family<- (Dataset3[Dataset3$rank == 'family',])
+
+#pie(Dataset3[Dataset3$rank == 'family',]$relative_abundance_percent, labels=c('Haloferacaceae', 'Haloarculaceae', 'Salinibacteraceae', 'Nanosalinaceae', 'Nitrococaceae', 'Oleiphilaceae', 'Halomonadaceae', 'PWNQ01'), border='white', col=c('cyan', 'blue', 'brown1', 'grey2', 'skyblue', 'lightgreen', 'brown', 'gold2'))
+```
+
+```{r}
+Dataset4 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_4_sample_4.tsv', sep='\t')
+print(Dataset4[Dataset4$rank == 'family',])
+Dataset4_Family<- (Dataset4[Dataset4$rank == 'family',])
+
+#pie(Dataset4[Dataset4$rank == 'family',]$relative_abundance_percent, labels=c('Haloferacaceae', 'Haloarculaceae', 'Salinibacteraceae', 'Nanosalinaceae', 'Nitrococaceae', 'Oleiphilaceae', 'Halomonadaceae'), border='white', col=c('cyan', 'blue', 'brown1', 'grey2', 'skyblue', 'lightgreen', 'brown'))
+
+```
+
+```{r}
+Dataset5 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_5_sample_5.tsv', sep='\t')
+print(Dataset5[Dataset5$rank == 'family',])
+Dataset5_Family<- (Dataset5[Dataset5$rank == 'family',])
+
+#pie(Dataset5[Dataset5$rank == 'family',]$relative_abundance_percent, labels=c('Haloferacaceae', 'Haloarculaceae', 'Salinibacteraceae', 'Nanosalinaceae', 'Nitrococaceae', 'Propionibacteriaceae', 'Microbacteriaceae', 'Burkholderiaceae'), border='white', col=c('cyan', 'blue', 'brown1', 'grey2', 'skyblue', 'lightgreen', 'brown', 'gold'))
+
+```
+
+```{r}
+Dataset6 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_6_sample_6.tsv', sep='\t')
+print(Dataset6[Dataset6$rank == 'family',])
+Dataset6_Family<- (Dataset6[Dataset6$rank == 'family',])
+
+#pie(Dataset6[Dataset6$rank == 'family',]$relative_abundance_percent, labels=c('Nitrococcaceae', 'Haloferacaceae', 'Oleiphilaceae','Halomonadaceae', 'Altermonadaceae', 'Microbacteriaceae', 'Haloarculaceae', 'Salinibacteraceae', 'Burkholderiaceae'), border='white', col=c('skyblue', 'cyan' 'lightgreen', 'deepskyblue','brown', 'gold'))
+
+```
+
+
+
+```{r}
+Dataset7 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_7_sample_7.tsv', sep='\t')
+print(Dataset7[Dataset7$rank == 'family',])
+Dataset7_Family<- (Dataset7[Dataset7$rank == 'family',])
+
+```
+
+
+```{r}
+Dataset8 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_8_sample_8.tsv', sep='\t')
+print(Dataset8[Dataset8$rank == 'family',])
+Dataset8_Family<- (Dataset8[Dataset8$rank == 'family',])
+
+```
+
+
+```{r}
+Dataset9 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_9_sample_9.tsv', sep='\t')
+print(Dataset9[Dataset9$rank == 'family',])
+Dataset9_Family<- (Dataset9[Dataset9$rank == 'family',])
+
+
+```
+
+```{r}
+Dataset10 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/YPQMX3_taxonomy-sylph/YPQMX3_1_rerun_sample_10_10.tsv', sep='\t')
+print(Dataset10[Dataset10$rank == 'family',])
+Dataset10_Family<- (Dataset10[Dataset10$rank == 'family',])
+
+
+```
+
+
+```{r}
+Dataset11 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_11_sample_11.tsv', sep='\t')
+Dataset11_genus<- (Dataset11[Dataset11$rank == 'genus',])
+print(Dataset11[Dataset11$rank == 'family',]$family)
+
+Dataset11_Family<- (Dataset11[Dataset11$rank == 'family',])
+
+
+```
+
+```{r}
+Dataset12 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_12_sample_12.tsv', sep='\t')
+print(Dataset12[Dataset12$rank == 'family',])
+Dataset12_Family<- (Dataset12[Dataset12$rank == 'family',])
+
+```
+
+
+```{r}
+Dataset13 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_13_sample_13.tsv', sep='\t')
+print(Dataset13[Dataset13$rank == 'family',]$family)
+print(Dataset13[Dataset13$rank == 'genus',]$genus)
+Dataset13_genus<- (Dataset13[Dataset13$rank == 'genus',])
+Dataset13_Family<- (Dataset13[Dataset13$rank == 'family',])
+
+
+```
+
+
+```{r}
+Dataset14 <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Z37TGN_taxonomy-sylph/Z37TGN_14_sample_14.tsv', sep='\t')
+print(Dataset14[Dataset14$rank == 'family',]$family)
+Dataset14_Family<- (Dataset14[Dataset14$rank == 'family',])
+
+```
+
+
+
+```{r}
+library(dplyr)
+library(forcats)
+data_tax <- read.delim('/home/mad149/Metagenome_grassmere/plasmidsaurus_output/Abundance(Ocean_salinity)(2).csv', sep=',')
+salinity<- c('Sample3.4', 'Sample5.2', 'Sample11.5', 'Sample17.2', 'Sample22.3', 'Sample30.2', 'Sample30.8', 'Sample_32.3')
+taxa_first_to_last <- c('Haloferacaceae', 'Haloarculaceae',  'Halorutilaceae','Halomonadaceae',"Salinibacteraceae" ,'Nanosalinaceae', 'Microbacteriaceae', 'Nitrococcaceae', 'Pseudohongiellaceae', 'Vibrionaceae', 'Alteromonadaceae' , 'Cyanobiaceae', 'Rhodobacteraceae', 'Desulfobacteraceae', 'Pelagibacteraceae', 'Flavobacteriaceae' , 'UBA4575', 'Oleiphilaceae' , 'Burkholderiaceae', 'Porticoccaceae', 'BM103','Wenzhouxiangellaceae','Propionibacteriaceae','PWNQ01','Other')
+
+data_tax$Family <- factor(data_tax$Family, levels=rev(taxa_first_to_last))
+data_tax$Sample_id <- factor(data_tax$Sample_id, levels = salinity)
+ggplot(data_tax, aes(fill=data_tax$Family, y=Abundance, x=data_tax$Sample_id)) + geom_col() + scale_fill_manual(values=c("Salinibacteraceae" = "red", 'Haloferacaceae' = 'deepskyblue', 'Haloarculaceae' = 'blue', 'Nanosalinaceae' = 'black', 'Halomonadaceae' = 'cyan', 'Halorutilaceae' = 'aquamarine'
+))+
+  theme(axis.title = element_text(size = 18))+
+  theme(axis.text = element_text(size = 14))+ theme(legend.text = element_text(size = 14))+ theme(legend.title = element_text(size = 16))
+
+
+data_tax$Sample_id <- factor(data_tax$Sample_id, levels = salinity)
+ggplot(data_tax, aes(fill=data_tax$Family, y=Abundance, x=data_tax$Sample_id)) + geom_col() + scale_fill_manual(values=c('Microbacteriaceae' = 'gold2', 'Nitrococcaceae' = 'green'))
+
+
+data_tax$Sample_id <- factor(data_tax$Sample_id, levels = salinity)
+ggplot(data_tax, aes(fill=data_tax$Family, y=Abundance, x=data_tax$Sample_id)) + geom_col() + scale_fill_manual(values=c('Microbacteriaceae' = 'gold2', 'Nitrococcaceae' = 'green',"Salinibacteraceae" = "red", 'Haloferacaceae' = 'deepskyblue', 'Haloarculaceae' = 'blue', 'Nanosalinaceae' = 'black', 'Halomonadaceae' = 'cyan', 'Halorutilaceae' = 'aquamarine'
+))+
+  theme(axis.title = element_text(size = 18))+
+  theme(axis.text = element_text(size = 14))+ theme(legend.text = element_text(size = 14))+ theme(legend.title = element_text(size = 16))
+
+
+
+ggplot(data_tax, aes(fill=data_tax$Family, y=Abundance, x=data_tax$Sample_id)) + geom_col() + scale_fill_manual(values=c('Microbacteriaceae' = 'gold2', 'Nitrococcaceae' = 'green',"Salinibacteraceae" = "red", 'Haloferacaceae' = 'deepskyblue', 'Haloarculaceae' = 'blue', 'Nanosalinaceae' = 'black', 'Halomonadaceae' = 'cyan', 'Halorutilaceae' = 'aquamarine', 'Pseudohongiellaceae' = 'purple', 'Vibrionaceae' = 'pink', 'Alteromonadaceae' = 'salmon', 'Cyanobiaceae' = 'darkgreen', 'Rhodobacteraceae' = 'brown', 'Desulfobacteraceae' = 'beige', 'Other'='grey', 'Pelagibacteraceae' = 'darkseagreen', 'Flavobacteriaceae' = 'coral', 'UBA4575' = 'yellow', 'Oleiphilaceae' = 'lightblue2', 'Burkholderiaceae' = 'brown1', 'Porticoccaceae' = 'cornflowerblue', 'BM103' = 'darkmagenta','Propionibacteriaceae' = 'gray45','Wenzhouxiangellaceae'='chartreuse4','PWNQ01' = 'deeppink'))+
+  theme(text = element_text(size = 28),
+        axis.text.x = element_text(angle = 90, hjust = 1)) 
+
+
+```
+
+
+

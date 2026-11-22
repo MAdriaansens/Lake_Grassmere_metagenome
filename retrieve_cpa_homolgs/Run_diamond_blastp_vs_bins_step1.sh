@@ -15,7 +15,7 @@ DB=/home/mad149/chapter_meta_analysis/Protein/fl/All_CPA_types_added_detail_unch
 
 outdir=Diamond/Diamond_blastp/Bins
 
-ID_LIST=/home/mad149/Metagenome_grassmere/Best_assembly_bins.txt
+ID_LIST=/home/mad149/Metagenome_grassmere/HQ_MQ_mags.txt
 Line_number=${array[$SLURM_ARRAY_TASK_ID]}
 ID=$(head -n ${array[$SLURM_ARRAY_TASK_ID]} ${ID_LIST} | tail -n1) 
 

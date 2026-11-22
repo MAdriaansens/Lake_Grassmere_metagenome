@@ -10,7 +10,7 @@
 
 HMMDB=/home/mad149/HMM_databases/individual_hmms
 
-
+cd /home/mad149/Metagenome_grassmere/Retrieved_CPAseqs/retrieved_from_bins
 module load HMMER/3.4-gompi-2025a
 hmmalign --trim --amino -o CPA_vs_HQMQ_bins_hmmaligned.sthk /home/mad149/HMM_databases/individual_hmms/PF00999.hmm CPA_sequences_vs_HQMQ_bins_rerun.fasta
 

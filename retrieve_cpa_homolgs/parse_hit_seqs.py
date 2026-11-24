@@ -111,7 +111,7 @@ for value in set(hit_dictionary.values()):
 unique_hit_list = list(set(hit_list))
 print(len(unique_hit_list))
 
-
+print(unique_hit_list[11:33])
 import os
 import glob
 import csv
@@ -164,32 +164,34 @@ with open('/home/mad149/Metagenome_grassmere/treeCPAs_hit_per_sample.tsv', 'w') 
                             protein_hit_list.remove(old_protein)
         counts = Counter(protein_hit_list)
         for unique_hit in unique_hit_list:
-            if 'NODE' not in unique_hit[0]:
+            if 'NODE' not in unique_hit:
                 #then a tree CPA was it
-                count_hit = counts[unique_hit[0]]
-                tree_CPA = unique_hit[0]
-                Line = (unique_hit[0] + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
+                count_hit = counts[unique_hit]
+                tree_CPA = unique_hit
+                Line = (unique_hit + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
                 output.write(Line)
-            elif 'Metaspades_isolate_contig' in unique_hit[0]:
-                count_hit = counts[unique_hit[0]]
-                tree_CPA = Best_hit_CPA_bins[unique_hit[0]]
+            elif 'Metaspades_isolate_contig' in unique_hit:
+                count_hit = counts[unique_hit]
+                tree_CPA = Best_hit_CPA_bins[unique_hit]
                 if 'NODE' in tree_CPA:
                     #means a mag is the closest hit to a contig CPA
                     MAG_id = (tree_CPA.split('_CPA_count')[0])
                     taxa=GTDBtk_dict[MAG_id] 
                     subfamily=tree_CPA.split(':')[-1]
                     new_title = MAG_id + '_taxa:' + taxa + '_Protein:' + subfamily
-                    Line = (unique_hit[0] + '\t' +  new_title +'\t' + str(count_hit) + '\t' + str(i)+'\n')
+                    Line = (unique_hit + '\t' +  new_title +'\t' + str(count_hit) + '\t' + str(i)+'\n')
                     output.write(Line)
                 else:
                     Line = (unique_hit[0] + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
                     output.write(Line)
-            elif 'metabat2_isolate_spades' in unique_hit[0]:
-                count_hit = counts[unique_hit[0]]
-                tree_CPA = Best_hit_CPA_bins[unique_hit[0]]
-                Line = (unique_hit[0] + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
+            elif 'metabat2_isolate_spades' in unique_hit:
+                count_hit = counts[unique_hit]
+                tree_CPA = Best_hit_CPA_bins[unique_hit]
+                Line = (unique_hit + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
                 output.write(Line)
                 
         
         print('done {}'.format(filename))
+
+
 

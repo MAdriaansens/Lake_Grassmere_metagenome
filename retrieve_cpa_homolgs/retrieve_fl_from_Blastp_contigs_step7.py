@@ -11,7 +11,7 @@ with open('/home/mad149/Metagenome_grassmere/Retrieved_CPAseqs/retrieved_from_co
                         sequence=line.split('\n')[0].split('\t')[-1]
                         if len(sequence) > 262:                                  
                             
-                            title = '>' + (blastp.split('/')[-1].split('_blastp_vs_protein_CPA.tsv')[0])+ '_contig_CPA_count{}'.format(count) +'_' + line.split('\t')[0] + '_' + line.split('\t')[1].split('Protein:')[-1]
+                            title = '>' + (blastp.split('/')[-1].split('_blastp_vs_protein_CPA.tsv')[0])+ '_contig_CPA_count{}'.format(count) +'_' + line.split('\t')[0] + '_Protein:' + line.split('\t')[1].split('Protein:')[-1]
 
                             if sequence.count('X') == 0:
                                 fasta = title + '\n' + sequence + '\n'

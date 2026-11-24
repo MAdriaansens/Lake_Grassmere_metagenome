@@ -182,7 +182,7 @@ with open('/home/mad149/Metagenome_grassmere/treeCPAs_hit_per_sample.tsv', 'w') 
                     Line = (unique_hit + '\t' +  new_title +'\t' + str(count_hit) + '\t' + str(i)+'\n')
                     output.write(Line)
                 else:
-                    Line = (unique_hit[0] + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
+                    Line = (unique_hit + '\t' +  tree_CPA +'\t' + str(count_hit) + '\t' + str(i)+'\n')
                     output.write(Line)
             elif 'metabat2_isolate_spades' in unique_hit:
                 count_hit = counts[unique_hit]
@@ -192,6 +192,5 @@ with open('/home/mad149/Metagenome_grassmere/treeCPAs_hit_per_sample.tsv', 'w') 
                 
         
         print('done {}'.format(filename))
-
 
 

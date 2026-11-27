@@ -1,3 +1,50 @@
+from Bio.SeqUtils.ProtParam import ProteinAnalysis as PA
+import glob
+import statistics
+from Bio import SeqIO
+
+
+Ip_dictionary = {}
+for entry in glob.glob('/home/mad149/Metagenome_grassmere/HQ_MG_mags/*faa'):
+    iep_list=[]
+    for record in SeqIO.parse('{}'.format(entry), 'fasta'):
+        protein=PA(record.seq)
+        iep_list.append(protein.isoelectric_point())
+
+    MAG_id = entry.split('/')[-1].split('.fa')[0]
+    
+    median = statistics.median(iep_list)
+    average= statistics.mean(iep_list)
+    Ip_dictionary[MAG_id] = [median, average]
+
+id_salinity = {'1': 32.3, '2': 32.3, '3': 30.2, '4':30.2, '5':30.8, '6':30.8, '7':22.3, '8':22.3, '9':17.2, '10':17.2, '11':11.2, '12':11.2, '13':5.8, '14':3.4, '15':31.3, '16':0}
+Kef_dictionary = {}
+Kef_list = []
+Kef_groupdict = {}
+Mj_dictionary={}
+with open('/home/mad149/chapter_meta_analysis/Archaea_types_subclades_per_protein_id.tsv', 'r') as Archaea_info:
+    for line in Archaea_info:
+        if line.split('\t')[2] == '29930':
+            Kef_dictionary[line.split('\t')[0].split('_tax')[0]] = line.split('\t')[3]
+            Kef_groupdict[line.split('\t')[0].split('_tax')[0]] = line.split('\t')[4]
+        elif line.split('\t')[2] == '18786':
+            Mj_dictionary[line.split('\t')[0].split('_tax')[0]] = 'MjNah1'
+with open('/home/mad149/chapter_meta_analysis/Bacteria_types_subclades_per_protein_id.tsv', 'r') as Bacteria_info:
+    for line in Bacteria_info:
+        if line.split('\t')[2] == '29930':
+            Kef_dictionary[line.split('\t')[0].split('_tax')[0]] = line.split('\t')[3]
+            Kef_groupdict[line.split('\t')[0].split('_tax')[0]] = line.split('\t')[4]
+        elif line.split('\t')[2] == '18786':
+            Mj_dictionary[line.split('\t')[0].split('_tax')[0]] = 'MjNah1'
+with open('/home/mad149/chapter_meta_analysis/Eukarya_types_subclades_per_protein_id.tsv', 'r') as Eukarya_info:
+    for line in Eukarya_info:
+        if line.split('\t')[2] == '29930':
+            Kef_dictionary[line.split('\t')[0].split('_tax')[0]] = line.split('\t')[3]
+            Kef_groupdict[line.split('\t')[0].split('_tax')[0]] = line.split('\t')[4]
+        elif line.split('\t')[2] == '18786':
+            Mj_dictionary[line.split('\t')[0].split('_tax')[0]] = 'MjNah1'
+
+
 from Bio import SeqIO
 import glob
 hq_mq_list = []
@@ -6,21 +53,17 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MQ_mags.txt', 'r') as mags:
         hq_mq_list.append(line.split('\n')[0])
 with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.tsv', 'w') as output:
 
-    header = 'MAG\tDEIK_Ratio\tRpS2_count\tRpL4_count\tMIP_count\tClcA_count\tMscS_count\tMscL_count\tOpuAC_count\tNa_ala_count\tCorA_count\tNa_Ca_count\tBCCT_count\tMgtE_count\tEctC_count\tMnhE_count\tTrehalose_PPase_count\tTrkH_count\tKup_count\tHppase_count\tNhaB_count\tNhaC_count\tNhaD_count\tKdp_count\tMtrA_count\tAApermease_count\tBranchedchainAA_transp_count\tTreT_count\tNqrA_count\tKimA_count\tBetain_ald_dehyd_count\ttotal_CPA_count\tUncharacterized_CPA_count\tKef_count\tCPA1_count\tNhaA_count\tNhaS5_count\tCHX_count\tGerN_count\tCPA1_SL_count\tNhaP_CPA1_count\tSOD2_count\tUndescribed_CPA1_count\tUndProkarya_CPA1_IDK_count\tKef_subclade44514\tKef_subclade29950\tKef_subclade42457\tKef_subclade44199\tKef_subclade42947\tKef_subclade42415\tKef_subclade44013\tKef_subclade44600\tKef_subclade43808\tKef_subclade43312\tKef_subclade43225\tKef_subclade43377\tKef_subclade43531\tKef_subclade43598\tKef_subclade43720\tKef_subclade44121\tKef_subclade43954\tKef_subclade43914\tKef_subclade42396\tKef_subclade44582\tKef_subclade44712\tMissing_kef\tKef_group34971\tKef_group35454\tKef_group37918\tKef_group38119\tKef_group38142\tmissing_kef_group\tMjNah1_count\n'
+    header = 'MAG\tSalinity\tIp_median\tIp_average\tDEIK_Ratio\tRpS2_count\tRpL4_count\tMIP_count\tClcA_count\tMscS_count\tMscL_count\tOpuAC_count\tNa_ala_count\tCorA_count\tNa_Ca_count\tBCCT_count\tMgtE_count\tEctC_count\tMnhE_count\tTrehalose_PPase_count\tTrkH_count\tKup_count\tHppase_count\tNhaB_count\tNhaC_count\tNhaD_count\tKdp_count\tMtrA_count\tTreT_count\tNqrA_count\tKimA_count\ttotal_CPA_count\tUncharacterized_CPA_count\tKef_count\tNHX_count\tNhaA_count\tNhaS5_count\tCHX_count\tGerN_count\tCPA1_SL_count\tNhaP_CPA1_count\tSOD2_count\tUndescribed_CPA1_count\tUndProkarya_CPA1_IDR_count\tKef_subclade44514\tKef_subclade29950\n'
 
     output.write(header)
 
 
 
     for mag in hq_mq_list:
-    
-        # ------------------------------------------------
-        # INITIALISE COUNTERS ONCE PER MAG
-        # ------------------------------------------------
-    
+  
     
         total_CPA_count = 0
-        CPA1_count = 0
+        NHX_count = 0
         Kef_count = 0
         NhaA_count = 0
         Uncharacterized_CPA_count = 0
@@ -29,10 +72,11 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
         Undescribed_CPA1_count = 0
         SOD2_count = 0
         NhaP_CPA1_count = 0
-        Undescribed_CPA1_IDK_count = 0
+        Undescribed_CPA1_IDR_count = 0
         GerN_count = 0
         CPA1_SL_count = 0
-    
+        Kef_subclade29950 = 0
+        Kef_subclade44514= 0
         BCCT_count = 0
         MIP_count = 0
         RpS2_count = 0
@@ -57,11 +101,9 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
         TreT_count = 0
         EctC_count = 0
         MtrA_count = 0
-        AApermease_count = 0
         NqrA_count = 0
-        Betain_ald_dehyd_count = 0
         KimA_count = 0
-        
+        Sequence = 'DEIK'
         
         for entry in glob.glob('/home/mad149/Metagenome_grassmere/HQ_MG_mags/homology_search/{}_Diamond_output/*.fasta'.format(mag)):
             for record in SeqIO.parse(entry, 'fasta'):
@@ -148,7 +190,7 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
                     KimA_count += 1
         
                 elif protein_type == 'NHX':
-                    CPA1_count += 1
+                    NHX_count += 1
         
                 elif protein_type == 'NhaA':
                     NhaA_count += 1
@@ -174,14 +216,30 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
                 elif protein_type == 'CPA1_SL':
                     CPA1_SL_count += 1
         
-                elif protein_type == 'UndProkaryaCPA1IDK':
-                    Undescribed_CPA1_IDK_count += 1
+                elif protein_type == 'UndProkaryaCPA1IDR':
+                    Undescribed_CPA1_IDR_count += 1
         
                 elif protein_type == 'Uncharacterized':
                     Uncharacterized_CPA_count += 1
+                elif protein_type == 'Kef':
+                    Kef_count +=1
+                    Kef_hit_id = (record.id.split('_tax')[0].split(':')[-1])
+                    Kef_subclade = (Kef_dictionary[Kef_hit_id])
+                    if Kef_subclade == '29950':
+                        Kef_subclade29950+=1
+                    elif Kef_subclade == '44514':
+                        Kef_subclade44514+=1
+
+            Ip_median = Ip_dictionary[mag][0]
+            Ip_average = Ip_dictionary[mag][1]
+            Salinity=id_salinity[mag.split('_')[-1].split('.')[0]]
             DEIK_ratio =  str((Sequence.count('D') + Sequence.count('E'))/(Sequence.count('I') + Sequence.count('K')))
-            Line = (
-                mag + '\t' + DEIK_ratio + '\t' +
+        Line = (
+                mag + '\t' + 
+                str(Salinity) + '\t' + 
+                str(Ip_median) + '\t' +
+                str(Ip_average) + '\t' + 
+                DEIK_ratio + '\t' + 
                 str(RpS2_count) + '\t' +
                 str(RpL4_count) + '\t' +
                 str(MIP_count) + '\t' +
@@ -205,16 +263,13 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
                 str(NhaD_count) + '\t' +
                 str(Kdp_count) + '\t' +
                 str(MtrA_count) + '\t' +
-                str(AApermease_count) + '\t' +
-                str(BranchedchainAA_transp_count) + '\t' +
                 str(TreT_count) + '\t' +
                 str(NqrA_count) + '\t' +
                 str(KimA_count) + '\t' +
-                str(Betain_ald_dehyd_count) + '\t' +
                 str(total_CPA_count) + '\t' +
                 str(Uncharacterized_CPA_count) + '\t' +
                 str(Kef_count) + '\t' +
-                str(CPA1_count) + '\t' +
+                str(NHX_count) + '\t' +
                 str(NhaA_count) + '\t' +
                 str(NhaS5_count) + '\t' +
                 str(CHX_count) + '\t' +
@@ -223,7 +278,9 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
                 str(NhaP_CPA1_count) + '\t' +
                 str(SOD2_count) + '\t' +
                 str(Undescribed_CPA1_count) + '\t' +
-                str(Undescribed_CPA1_IDK_count) + '\n'
+                str(Undescribed_CPA1_IDR_count) + '\t' +
+                str(Kef_subclade44514) + '\t' +
+                str(Kef_subclade29950) + '\n'
             )
         
         output.write(Line)

@@ -60,7 +60,11 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
 
 
     for mag in hq_mq_list:
-  
+    
+        # ------------------------------------------------
+        # INITIALISE COUNTERS ONCE PER MAG
+        # ------------------------------------------------
+    
     
         total_CPA_count = 0
         NHX_count = 0
@@ -233,7 +237,10 @@ with open('/home/mad149/Metagenome_grassmere/HQ_MG_mags/counted_blastp_vs_MAGs.t
             Ip_median = Ip_dictionary[mag][0]
             Ip_average = Ip_dictionary[mag][1]
             Salinity=id_salinity[mag.split('_')[-1].split('.')[0]]
-            DEIK_ratio =  str((Sequence.count('D') + Sequence.count('E'))/(Sequence.count('I') + Sequence.count('K')))
+            if RpS2_count == 0 and RpL4_count == 0:
+                    DEIK_ratio = 'NaN'
+            else:
+                DEIK_ratio =  str((Sequence.count('D') + Sequence.count('E'))/(Sequence.count('I') + Sequence.count('K')))
         Line = (
                 mag + '\t' + 
                 str(Salinity) + '\t' + 

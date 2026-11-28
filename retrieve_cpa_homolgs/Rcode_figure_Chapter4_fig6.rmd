@@ -1,0 +1,182 @@
+---
+title: "Untitled"
+output: html_document
+date: "2026-10-05"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+NRhits_narrow<- read.delim('/home/mad149/Metagenome_grassmere/NRCPAs_hit_per_sample.tsv', sep='\t', stringsAsFactors = TRUE)
+
+library(dplyr)
+library(tidyr)
+
+
+hits_wide <-pivot_wider(data=NRhits_narrow, names_from=sample, values_from=count_hit)
+
+hits_wide <- hits_wide %>% mutate(`32.3`=`1`+`2`) %>% select(-`1`, - `2`)
+hits_wide <- hits_wide %>% mutate(`30.2`=`3`+`4`) %>% select(-`3`, - `4`)
+
+hits_wide <- hits_wide %>% mutate(`30.8`=`5`+`6`) %>% select(-`5`, - `6`)
+
+hits_wide <- hits_wide %>% mutate(`22.3`=`7`+`8`) %>% select(-`7`, - `8`)
+
+hits_wide <- hits_wide %>% mutate(`17.2`=`9`+`10`) %>% select(-`9`, - `10`)
+
+hits_wide <- hits_wide %>% mutate(`11.2`=`11`+`12`) %>% select(-`11`, - `12`)
+
+hits_wide <- rename(hits_wide, `5.2` = `13`)
+
+hits_wide <- rename(hits_wide, `3.4`= `14`)
+
+hits_wide <- hits_wide[, c("protein_hit", "best_tree_CPA", "3.4", "5.2","11.2", "17.2", "22.3", "30.2", "30.8", "32.3")]
+
+```
+
+
+
+```{r}
+hits_wide  %>%
+  summarise(total = sum(`3.4`, na.rm = TRUE), .by = best_tree_CPA ) -> most_abundant34
+most_abundant34$relative_abundance <- most_abundant34$total/sum(most_abundant34$total)
+hits_wide  %>%
+  summarise(total = sum(`5.2`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant58
+most_abundant58$relative_abundance <- most_abundant58$total/sum(most_abundant58$total)
+
+hits_wide  %>%
+  summarise(total = sum(`11.2`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant112
+most_abundant112$relative_abundance <- most_abundant112$total/sum(most_abundant112$total)
+
+hits_wide  %>%
+  summarise(total = sum(`17.2`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant172
+most_abundant172$relative_abundance <- most_abundant172$total/sum(most_abundant172$total)
+
+hits_wide  %>%
+  summarise(total = sum(`22.3`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant223
+most_abundant223$relative_abundance <- most_abundant223$total/sum(most_abundant223$total)
+
+hits_wide  %>%
+  summarise(total = sum(`30.2`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant302
+most_abundant302$relative_abundance <- most_abundant302$total/sum(most_abundant302$total)
+
+hits_wide  %>%
+  summarise(total = sum(`30.8`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant308
+most_abundant308$relative_abundance <- most_abundant308$total/sum(most_abundant308$total)
+
+hits_wide  %>%
+  summarise(total = sum(`32.3`, na.rm = TRUE), .by = best_tree_CPA) -> most_abundant323
+most_abundant323$relative_abundance <- most_abundant323$total/sum(most_abundant323$total)
+
+```
+
+
+
+```{r}
+
+hits_wide%>% separate(best_tree_CPA, c('Taxa_protein_id', 'CPA_subfamily'), '_Protein:')-> hits_wide
+
+hits_wide%>% separate(Taxa_protein_id, c('protein_id', 'Taxa'), ':')-> hits_wide
+hits_wide%>% separate(Taxa, c('Higher_taxa', 'Genera_species'), ';g__')-> hits_wide
+hits_wide%>% separate(Genera_species, c('Genera', 'Species'), ';s__')-> hits_wide
+
+hits_wide%>% separate(Higher_taxa, c('Class_etc', 'Family'), ';f__')-> hits_wide
+
+hits_wide$Family[is.na(hits_wide$Family)] <- 'Eukarya'
+
+hits_wide$`3.4` <- hits_wide$`3.4`/(sum(hits_wide$`3.4`))
+hits_wide$`5.2` <- hits_wide$`5.2`/(sum(hits_wide$`5.2`))
+hits_wide$`11.2` <- hits_wide$`11.2`/(sum(hits_wide$`11.2`))
+hits_wide$`17.2` <- hits_wide$`17.2`/(sum(hits_wide$`17.2`))
+hits_wide$`22.3` <- hits_wide$`22.3`/(sum(hits_wide$`22.3`))
+hits_wide$`30.8` <- hits_wide$`30.8`/(sum(hits_wide$`30.8`))
+hits_wide$`30.2` <- hits_wide$`30.2`/(sum(hits_wide$`30.2`))
+hits_wide$`32.3` <- hits_wide$`32.3`/(sum(hits_wide$`32.3`))
+
+hits_wide  %>%
+  summarise(total = sum(`3.4`, na.rm = TRUE), .by = Genera) -> most_abundant_genera34
+hits_wide  %>%
+  summarise(total = sum(`5.2`, na.rm = TRUE), .by = Genera) -> most_abundant_genera58
+hits_wide  %>%
+  summarise(total = sum(`11.2`, na.rm = TRUE), .by = Genera) -> most_abundant_genera112
+hits_wide  %>%
+  summarise(total = sum(`17.2`, na.rm = TRUE), .by = Genera) -> most_abundant_genera172
+hits_wide  %>%
+  summarise(total = sum(`22.3`, na.rm = TRUE), .by = Genera) -> most_abundant_genera223
+hits_wide  %>%
+  summarise(total = sum(`30.2`, na.rm = TRUE), .by = Genera) -> most_abundant_genera302
+hits_wide  %>%
+  summarise(total = sum(`30.8`, na.rm = TRUE), .by = Genera) -> most_abundant_genera308
+hits_wide  %>%
+  summarise(total = sum(`32.3`, na.rm = TRUE), .by = Genera) -> most_abundant_genera323
+```
+
+
+```{r}
+hits_wide  %>%
+  summarise(total = sum(`3.4`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily34
+hits_wide  %>%
+  summarise(total = sum(`5.2`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily52
+hits_wide  %>%
+  summarise(total = sum(`11.2`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily112
+hits_wide  %>%
+  summarise(total = sum(`17.2`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily172
+hits_wide  %>%
+  summarise(total = sum(`22.3`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily223
+hits_wide  %>%
+  summarise(total = sum(`30.2`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily302
+hits_wide  %>%
+  summarise(total = sum(`30.8`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily308
+hits_wide  %>%
+  summarise(total = sum(`32.3`, na.rm = TRUE), .by = CPA_subfamily) -> most_abundant_CPA_subfamily323
+```
+
+
+```{r}
+library(ggplot2)
+
+taxa_first_to_last <- c('Haloferacaceae', 'Eukarya', 'Haloarculaceae',  'Halorutilaceae','Halomonadaceae',"Salinibacteraceae" ,'Nanosalinaceae', 'Microbacteriaceae', 'Nitrococcaceae', 'Pseudohongiellaceae', 'Vibrionaceae', 'Alteromonadaceae' , 'Cyanobiaceae', 'Rhodobacteraceae', 'Desulfobacteraceae', 'Pelagibacteraceae', 'Flavobacteriaceae' , 'UBA4575', 'Oleiphilaceae' , 'Burkholderiaceae', 'Porticoccaceae', 'BM103','Wenzhouxiangellaceae','Propionibacteriaceae','PWNQ01','CAYYUA01')
+
+hits_wide$Family_rename <- factor(
+  hits_wide$Family,
+  levels = c(taxa_first_to_last, "Other"),
+  ordered = TRUE
+)
+hits_wide$Family_rename[is.na(hits_wide$Family_rename)] <- "Other"
+
+hits_long <- hits_wide %>%
+  pivot_longer(
+    cols = -c(protein_hit, protein_id, Class_etc, Genera,Species,
+              CPA_subfamily, Family, Family_rename),
+    names_to = "salinity",
+    values_to = "count"
+  )
+
+
+
+
+```
+
+```{r}
+
+
+hits_long <- hits_long %>%mutate(salinity = fct_relevel(salinity, "3.4", "5.2","11.2", "17.2", "22.3", "30.2", "30.8", "32.3"))
+
+
+
+ggplot(hits_long, aes(x =salinity, y=count, fill = Family_rename)) +geom_col(color = "black", linewidth = 0.02)+scale_fill_manual(values = c('Microbacteriaceae' = 'gold2','Nitrococcaceae' = 'green','Salinibacteraceae' = 'red','Haloferacaceae' = 'deepskyblue','Haloarculaceae' = 'blue','Nanosalinaceae' = 'beige','Halomonadaceae' = 'cyan','Halorutilaceae' = 'aquamarine','Pseudohongiellaceae' = 'purple','Vibrionaceae' = 'pink','Alteromonadaceae' = 'salmon','Cyanobiaceae' = 'darkgreen','Rhodobacteraceae' = 'brown','Desulfobacteraceae' = 'brown','Other' = 'grey','Pelagibacteraceae' = 'darkseagreen','Flavobacteriaceae' = 'coral','UBA4575' = 'white','Eukarya' = 'orange','Oleiphilaceae' = 'lightblue2','Burkholderiaceae' = 'brown1','Porticoccaceae' = 'cornflowerblue','BM103' = 'darkmagenta','Propionibacteriaceae' = 'gray45','Wenzhouxiangellaceae' = 'chartreuse4','PWNQ01' = 'deeppink', 'CAYYUA01'='yellow'))
+
+ggplot(hits_long, aes(x =salinity, y=count, fill = Family_rename)) +geom_col()+scale_fill_manual(values = c('Microbacteriaceae' = 'gold2','Nitrococcaceae' = 'green','Salinibacteraceae' = 'red','Haloferacaceae' = 'deepskyblue','Haloarculaceae' = 'blue','Nanosalinaceae' = 'black','Halomonadaceae' = 'tan','Halorutilaceae' = 'aquamarine','Pseudohongiellaceae' = 'purple','Vibrionaceae' = 'pink','Alteromonadaceae' = 'salmon','Cyanobiaceae' = 'darkgreen','Rhodobacteraceae' = 'brown','Desulfobacteraceae' = 'indianred1','Other' = 'grey','Pelagibacteraceae' = 'darkseagreen','Flavobacteriaceae' = 'coral','UBA4575' = 'beige','Eukarya' = 'orange','Oleiphilaceae' = 'khaki2','Burkholderiaceae' = 'brown1','Porticoccaceae' = 'yellowgreen','BM103' = 'darkmagenta','Propionibacteriaceae' = 'gray45','Wenzhouxiangellaceae' = 'chartreuse4','PWNQ01' = 'deeppink', 'CAYYUA01'='yellow'))+ theme(axis.title = element_text(size = 16), axis.title.x = element_text(size = 18), axis.title.y = element_text(size = 14)) +labs(x = "% Salinity (w/v)", y = "Relative abundance (%)")
+
+ggplot(hits_long, aes(x =salinity, y=count, fill =CPA_subfamily)) +geom_col()
+
+ggplot(hits_long, aes(x =salinity, y=count, fill =CPA_subfamily)) +geom_col(linewidth=0) +scale_fill_manual(values=c('Kef' = 'deeppink','UndProkaryaCPA1IDR'='cornflowerblue', 'CHX'='red', 'NHX'='cyan3','NhaA'='orange3', 'CPA1_SL'='green3', 'NhaPCPA1'='purple4','NhaS5'='darkseagreen', 'SOD2'='brown', 'Undescribed_CPA1'='gold2', 'GerN'='black')) + theme(axis.title = element_text(size = 16), axis.title.x = element_text(size = 18), axis.title.y = element_text(size = 14)) +labs(x = "% Salinity (w/v)", y = "Relative abundance (%)")
+
+
+
+```
+

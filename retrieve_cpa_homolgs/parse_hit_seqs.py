@@ -138,7 +138,7 @@ with open(taxonomy_file, 'r', newline='') as gtdb:
 
 new_hit_dictionary = {}
 from collections import Counter
-with open('/home/mad149/Metagenome_grassmere/treeCPAs_hit_per_sample.tsv', 'w') as output:
+with open('/home/mad149/Metagenome_grassmere/NRCPAs_hit_per_sample.tsv', 'w') as output:
     header = 'protein_hit' + '\t' + 'best_tree_CPA' + '\t' + 'count_hit' + '\t' + 'sample' + '\n'
     output.write(header)
     for i in range(1, 15):
